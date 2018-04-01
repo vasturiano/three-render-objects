@@ -132,6 +132,7 @@ export default Kapsule({
     }, false);
 
     // Setup renderer, camera and controls
+    state.renderer.setSize(state.width, state.height);
     state.container.appendChild(state.renderer.domElement);
     state.tbControls = new ThreeTrackballControls(state.camera, state.renderer.domElement);
     state.tbControls.minDistance = 0.1;
