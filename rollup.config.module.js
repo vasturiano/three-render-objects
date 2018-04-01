@@ -15,6 +15,12 @@ export default {
   ],
   external: [...Object.keys(dependencies), ...Object.keys(peerDependencies)],
   plugins: [
+    postCss({
+      plugins: [
+        postCssSimpleVars(),
+        postCssNested()
+      ]
+    }),
     babel()
   ]
 };
