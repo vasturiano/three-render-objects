@@ -1,0 +1,36 @@
+<head>
+  <style> body { margin: 0; }</style>
+
+  <script src="//unpkg.com/three"></script>
+
+  <script src="//unpkg.com/three-render-objects"></script>
+  <!--<script src="../../dist/three-render-objects.js"></script>-->
+</head>
+
+<body>
+  <div id="myscene"></div>
+
+  <script>
+    // Gen random positioned objects
+    const N = 300;
+    const COORD_RANGE = 300;
+
+    const objs = [...Array(N)].map(() => new THREE.Mesh(
+      new THREE.SphereGeometry(10),
+      new THREE.MeshBasicMaterial({ color: 'red' })
+    ));
+
+    objs.forEach(obj => {
+      ['x', 'y', 'z'].forEach(dim => obj.position[dim] = Math.random() * COORD_RANGE * 2 - COORD_RANGE);
+    });
+
+    const ObjRender = ThreeRenderObjects()
+      (document.getElementById('myscene'))
+      .objects(objs);
+
+    (function animate() {
+      ObjRender.tick(); // render it
+      requestAnimationFrame(animate);
+    })(); // IIFE
+  </script>
+</body>
