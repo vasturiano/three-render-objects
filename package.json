@@ -1,0 +1,60 @@
+{
+  "name": "three-render-objects",
+  "version": "0.1.0",
+  "description": "Easy way to render ThreeJS objects with built-in interaction defaults",
+  "unpkg": "dist/three-render-objects.min.js",
+  "main": "dist/three-render-objects.common.js",
+  "module": "dist/three-render-objects.module.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vasturiano/three-render-objects.git"
+  },
+  "homepage": "https://github.com/vasturiano/three-render-objects",
+  "keywords": [
+    "3d",
+    "three",
+    "objects",
+    "scene",
+    "tick",
+    "webgl"
+  ],
+  "author": {
+    "name": "Vasco Asturiano",
+    "url": "http://bl.ocks.org/vasturiano"
+  },
+  "bugs": {
+    "url": "https://github.com/vasturiano/three-render-objects/issues"
+  },
+  "scripts": {
+    "build": "rimraf dist && rollup -c",
+    "watch": "rollup -c -w",
+    "minify": "uglifyjs dist/three-render-objects.js -o dist/three-render-objects.min.js -c -m --comments '/Version/'",
+    "build-module": "rollup -c rollup.config.module.js",
+    "prepublish": "npm run build && npm run minify && npm run build-module"
+  },
+  "dependencies": {
+    "accessor-fn": "^1.2.2",
+    "kapsule": "^1.9.0",
+    "three-trackballcontrols": "^0.0.7"
+  },
+  "peerDependencies": {
+    "three": ">= 0.86"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "postcss-nested": "^3.0.0",
+    "postcss-simple-vars": "^4.1.0",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.57.0",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.2.0",
+    "rollup-plugin-postcss": "^1.4.0",
+    "rollup-watch": "^4.3.1",
+    "uglify-js": "^3.3.15"
+  }
+}
