@@ -32,7 +32,7 @@ export default Kapsule({
     width: { default: window.innerWidth },
     height: { default: window.innerHeight },
     backgroundColor: {
-      default: '#000000',
+      default: '#000011',
       onChange(bckgColor, state) {
         const alpha = tinycolor(bckgColor).getAlpha();
         state.renderer.setClearColor(new three.Color(bckgColor), alpha);
