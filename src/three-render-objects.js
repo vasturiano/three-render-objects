@@ -52,7 +52,7 @@ export default Kapsule({
           raycaster.linePrecision = state.lineHoverPrecision;
 
           raycaster.setFromCamera(state.mousePos, state.camera);
-          const intersects = raycaster.intersectObjects(state.objects);
+          const intersects = raycaster.intersectObjects(state.objects, true);
 
           const topObject = intersects.length ? intersects[0].object : null;
 
