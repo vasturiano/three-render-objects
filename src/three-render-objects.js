@@ -2,7 +2,6 @@ import {
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
-  AmbientLight,
   Raycaster,
   Vector2,
   Color
@@ -14,7 +13,6 @@ const three = window.THREE
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
-  AmbientLight,
   Raycaster,
   Vector2,
   Color
