@@ -47,6 +47,7 @@ export default Kapsule({
     }, triggerUpdate: false },
     enablePointerInteraction: { default: true, onChange(_, state) { state.hoverObj = null; }, triggerUpdate: false },
     lineHoverPrecision: { default: 1, triggerUpdate: false },
+    hoverOrderComparator: { default: () => -1, triggerUpdate: false }, // keep existing order by default
     tooltipContent: { triggerUpdate: false },
     onHover: { default: () => {}, triggerUpdate: false },
     onClick: { default: () => {}, triggerUpdate: false }
@@ -64,9 +65,11 @@ export default Kapsule({
           raycaster.linePrecision = state.lineHoverPrecision;
 
           raycaster.setFromCamera(state.mousePos, state.camera);
-          const intersects = raycaster.intersectObjects(state.objects, true);
+          const intersects = raycaster.intersectObjects(state.objects, true)
+            .map(({ object }) => object)
+            .sort(state.hoverOrderComparator);
 
-          const topObject = intersects.length ? intersects[0].object : null;
+          const topObject = intersects.length ? intersects[0] : null;
 
           if (topObject !== state.hoverObj) {
             state.onHover(topObject, state.hoverObj);
@@ -80,7 +83,8 @@ export default Kapsule({
     },
     renderer: state => state.renderer,
     scene: state => state.scene,
-    camera: state => state.camera
+    camera: state => state.camera,
+    tbControls: state => state.tbControls
   },
 
   stateInit: {
