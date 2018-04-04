@@ -52,9 +52,15 @@ export default Kapsule({
           raycaster.linePrecision = state.lineHoverPrecision;
 
           raycaster.setFromCamera(state.mousePos, state.camera);
-          const intersects = raycaster.intersectObjects(state.objects, true);
+          const intersects = raycaster.intersectObjects(state.objects, true)
+            .map(({ object }) => {
+              let obj = object;
+              // recurse up object chain until finding the top-level object (directly attached to scene)
+              while(obj && obj.parent && obj.parent.type !== 'Scene') { obj = obj.parent; }
+              return obj;
+            });
 
-          const topObject = intersects.length ? intersects[0].object : null;
+          const topObject = intersects.length ? intersects[0] : null;
 
           if (topObject !== state.hoverObj) {
             state.onHover(topObject, state.hoverObj);
