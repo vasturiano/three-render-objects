@@ -64,15 +64,9 @@ export default Kapsule({
           raycaster.linePrecision = state.lineHoverPrecision;
 
           raycaster.setFromCamera(state.mousePos, state.camera);
-          const intersects = raycaster.intersectObjects(state.objects, true)
-            .map(({ object }) => {
-              let obj = object;
-              // recurse up object chain until finding the top-level object (directly attached to scene)
-              while(obj && obj.parent && obj.parent.type !== 'Scene') { obj = obj.parent; }
-              return obj;
-            });
+          const intersects = raycaster.intersectObjects(state.objects, true);
 
-          const topObject = intersects.length ? intersects[0] : null;
+          const topObject = intersects.length ? intersects[0].object : null;
 
           if (topObject !== state.hoverObj) {
             state.onHover(topObject, state.hoverObj);
@@ -150,12 +144,12 @@ export default Kapsule({
     }, false);
 
     // Setup renderer, camera and controls
-    state.renderer.setSize(state.width, state.height);
     state.container.appendChild(state.renderer.domElement);
     state.tbControls = new ThreeTrackballControls(state.camera, state.renderer.domElement);
     state.tbControls.minDistance = 0.1;
     state.tbControls.maxDistance = 50000;
 
+    state.renderer.setSize(state.width, state.height);
     state.camera.position.z = 1000;
     state.camera.far = 50000;
 
