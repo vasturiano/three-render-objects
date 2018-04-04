@@ -4,7 +4,8 @@ import {
   PerspectiveCamera,
   AmbientLight,
   Raycaster,
-  Vector2
+  Vector2,
+  Color
 } from 'three';
 
 const three = window.THREE
@@ -15,8 +16,11 @@ const three = window.THREE
   PerspectiveCamera,
   AmbientLight,
   Raycaster,
-  Vector2
+  Vector2,
+  Color
 };
+
+import tinycolor from 'tinycolor2';
 
 import ThreeTrackballControls from 'three-trackballcontrols';
 
@@ -27,6 +31,14 @@ export default Kapsule({
   props: {
     width: { default: window.innerWidth },
     height: { default: window.innerHeight },
+    backgroundColor: {
+      default: '#000000',
+      onChange(bckgColor, state) {
+        const alpha = tinycolor(bckgColor).getAlpha();
+        state.renderer.setClearColor(new three.Color(bckgColor), alpha);
+      },
+      triggerUpdate: false
+    },
     showNavInfo: { default: true },
     objects: { default: [], onChange(objs, state) {
       (state.prevObjs || []).forEach(obj => state.scene.remove(obj)); // Clear the place
@@ -78,7 +90,7 @@ export default Kapsule({
   },
 
   stateInit: {
-    renderer: new three.WebGLRenderer(),
+    renderer: new three.WebGLRenderer({ alpha: true }),
     scene: new three.Scene(),
     camera: new three.PerspectiveCamera()
   },

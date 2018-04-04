@@ -35,7 +35,8 @@
   "dependencies": {
     "accessor-fn": "^1.2.2",
     "kapsule": "^1.9.0",
-    "three-trackballcontrols": "^0.0.7"
+    "three-trackballcontrols": "^0.0.7",
+    "tinycolor2": "^1.4.1"
   },
   "peerDependencies": {
     "three": ">= 0.86"
