@@ -4,6 +4,7 @@ import {
   PerspectiveCamera,
   Raycaster,
   Vector2,
+  Vector3,
   Color
 } from 'three';
 
@@ -15,12 +16,14 @@ const three = window.THREE
   PerspectiveCamera,
   Raycaster,
   Vector2,
+  Vector3,
   Color
 };
 
-import tinycolor from 'tinycolor2';
-
 import ThreeTrackballControls from 'three-trackballcontrols';
+
+import tinycolor from 'tinycolor2';
+import TweenLite from 'gsap/TweenLite';
 
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
@@ -78,6 +81,59 @@ export default Kapsule({
       }
 
       return this;
+    },
+    cameraPosition: function(state, position, lookAt, transitionDuration) {
+      const camera = state.camera;
+
+      // Setter
+      if (position && state.initialised) {
+        const finalPos = position;
+        const finalLookAt = lookAt || {x: 0, y: 0, z: 0};
+
+        if (!transitionDuration) { // no animation
+          setCameraPos(finalPos);
+          setLookAt(finalLookAt);
+        } else {
+          const camPos = Object.assign({}, camera.position);
+          const camLookAt = getLookAt();
+          const tweenDuration = transitionDuration/1000; // ms > s
+
+          TweenLite.to(camPos, tweenDuration, Object.assign({
+            onUpdate: () => setCameraPos(camPos)
+          }, finalPos));
+
+          // Face direction in 1/3rd of time
+          TweenLite.to(camLookAt, tweenDuration/3, Object.assign({
+            onUpdate: () => setLookAt(camLookAt)
+          }, finalLookAt));
+        }
+
+        return this;
+      }
+
+      // Getter
+      return Object.assign({}, camera.position, { lookAt: getLookAt() });
+
+      //
+
+      function setCameraPos(pos) {
+        const { x, y, z } = pos;
+        if (x !== undefined) camera.position.x = x;
+        if (y !== undefined) camera.position.y = y;
+        if (z !== undefined) camera.position.z = z;
+      }
+
+      function setLookAt(lookAt) {
+        state.tbControls.target = new three.Vector3(lookAt.x, lookAt.y, lookAt.z);
+      }
+
+      function getLookAt() {
+        return Object.assign(
+          (new three.Vector3(0, 0, -1000))
+            .applyQuaternion(camera.quaternion)
+            .add(camera.position)
+        );
+      }
     },
     renderer: state => state.renderer,
     scene: state => state.scene,
