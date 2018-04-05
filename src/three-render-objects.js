@@ -23,7 +23,7 @@ const three = window.THREE
 import ThreeTrackballControls from 'three-trackballcontrols';
 
 import tinycolor from 'tinycolor2';
-import TweenLite from 'gsap/TweenLite';
+import TweenLite from 'gsap';
 
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
