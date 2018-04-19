@@ -141,11 +141,11 @@ export default Kapsule({
     tbControls: state => state.tbControls
   },
 
-  stateInit: {
+  stateInit: () => ({
     renderer: new three.WebGLRenderer({ alpha: true }),
     scene: new three.Scene(),
     camera: new three.PerspectiveCamera()
-  },
+  }),
 
   init: (domNode, state) => {
     // Wipe DOM
