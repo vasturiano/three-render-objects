@@ -35,8 +35,10 @@ export default Kapsule({
     backgroundColor: {
       default: '#000011',
       onChange(bckgColor, state) {
-        const alpha = tinycolor(bckgColor).getAlpha();
-        state.renderer.setClearColor(new three.Color(bckgColor), alpha);
+        if (state.renderer) {
+          const alpha = tinycolor(bckgColor).getAlpha();
+          state.renderer.setClearColor(new three.Color(bckgColor), alpha);
+        }
       },
       triggerUpdate: false
     },
@@ -142,7 +144,6 @@ export default Kapsule({
   },
 
   stateInit: () => ({
-    renderer: new three.WebGLRenderer({ alpha: true }),
     scene: new three.Scene(),
     camera: new three.PerspectiveCamera()
   }),
@@ -202,7 +203,10 @@ export default Kapsule({
     }, false);
 
     // Setup renderer, camera and controls
+    state.renderer = new three.WebGLRenderer({ alpha: true });
+    state.renderer.setClearColor(new three.Color(state.backgroundColor), tinycolor(state.backgroundColor).getAlpha());
     state.container.appendChild(state.renderer.domElement);
+
     state.tbControls = new ThreeTrackballControls(state.camera, state.renderer.domElement);
     state.tbControls.minDistance = 0.1;
     state.tbControls.maxDistance = 50000;
