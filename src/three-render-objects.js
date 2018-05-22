@@ -62,7 +62,7 @@ export default Kapsule({
         state.tbControls.update();
         state.renderer.render(state.scene, state.camera);
 
-        if (state.enablePointerInteraction) {
+        if (!state.mousedown && state.enablePointerInteraction) {
           // Update tooltip and trigger onHover events
           const raycaster = new three.Raycaster();
           raycaster.linePrecision = state.lineHoverPrecision;
@@ -196,13 +196,25 @@ export default Kapsule({
     }, false);
 
     // Handle click events on objs
-    state.container.addEventListener("click", ev => {
-      if (state.hoverObj) {
-        state.onClick(state.hoverObj);
-      }
+    state.container.addEventListener("mousedown", ev => {
+        state.mousedown = true;
+        state.clickObj = state.hoverObj;
+        if(state.clickObj) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        }
     }, false);
 
-    // Setup renderer, camera and controls
+    state.container.addEventListener("mouseup", ev => {
+        if (state.clickObj) {
+            state.onClick(state.clickObj);
+            delete state.clickObj;
+        }
+        state.mousedown = false;
+    }, false);
+
+      // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer({ alpha: true });
     state.renderer.setClearColor(new three.Color(state.backgroundColor), tinycolor(state.backgroundColor).getAlpha());
     state.container.appendChild(state.renderer.domElement);
