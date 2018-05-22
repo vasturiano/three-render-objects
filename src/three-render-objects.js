@@ -193,8 +193,6 @@ export default Kapsule({
             // Move tooltip
             state.toolTipElem.style.top = relPos.y + 'px';
             state.toolTipElem.style.left = relPos.x + 'px';
-        } else {
-            delete state.clickObj;
         }
 
         function getOffset(el) {
