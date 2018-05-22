@@ -197,23 +197,22 @@ export default Kapsule({
     }, false);
 
     // Handle click events on objs
-      state.container.addEventListener("mousedown", ev => {
-        state.mousedown = true;
-          if (state.hoverObj) {
-              state.clickObj = state.hoverObj;
-              ev.stopPropagation();
-          }
-      }, true);
+    state.container.addEventListener("mousedown", ev => {
+      state.mousedown = true;
+        if (state.hoverObj) {
+            state.clickObj = state.hoverObj;
+        }
+    }, true);
 
-      state.container.addEventListener("mouseup", ev => {
-          if (state.clickObj) {
-              state.onClick(state.clickObj);
-              delete state.clickObj;
-          }
-          state.mousedown = false;
-      }, false);
+    state.container.addEventListener("mouseup", ev => {
+        if (state.clickObj) {
+            state.onClick(state.clickObj);
+            delete state.clickObj;
+        }
+        state.mousedown = false;
+    }, false);
 
-      // Setup renderer, camera and controls
+    // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer({ alpha: true });
     state.renderer.setClearColor(new three.Color(state.backgroundColor), tinycolor(state.backgroundColor).getAlpha());
     state.container.appendChild(state.renderer.domElement);
