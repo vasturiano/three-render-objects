@@ -170,54 +170,52 @@ export default Kapsule({
     state.mousePos = new three.Vector2();
     state.mousePos.x = -2; // Initialize off canvas
     state.mousePos.y = -2;
-    state.container.addEventListener("mousemove", ev => {
-      if (state.enablePointerInteraction) {
 
-        // update the mouse pos
-        const offset = getOffset(state.container),
-          relPos = {
-            x: ev.pageX - offset.left,
-            y: ev.pageY - offset.top
-          };
-        state.mousePos.x = (relPos.x / state.width) * 2 - 1;
-        state.mousePos.y = -(relPos.y / state.height) * 2 + 1;
-
-        // Move tooltip
-        state.toolTipElem.style.top = `${relPos.y}px`;
-        state.toolTipElem.style.left = `${relPos.x}px`;
-      }
-
-      function getOffset(el) {
-        const rect = el.getBoundingClientRect(),
-          scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-          scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
-      }
-    }, false);
+      // Setup renderer, camera and controls
+    state.renderer = new three.WebGLRenderer({ alpha: true });
+    state.renderer.setClearColor(new three.Color(state.backgroundColor), tinycolor(state.backgroundColor).getAlpha());
+    state.container.appendChild(state.renderer.domElement);
 
     // Handle click events on objs
-    state.container.addEventListener("mousedown", ev => {
-        state.mousedown = true;
-        state.clickObj = state.hoverObj;
-        if(state.clickObj) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            return false;
+    state.renderer.domElement.addEventListener("mousemove", function (ev) {
+        delete state.clickObj;
+        if (!state.mousedown && state.enablePointerInteraction) {
+
+            // update the mouse pos
+            var offset = getOffset(state.container),
+                relPos = {
+                    x: ev.pageX - offset.left,
+                    y: ev.pageY - offset.top
+                };
+            state.mousePos.x = relPos.x / state.width * 2 - 1;
+            state.mousePos.y = -(relPos.y / state.height) * 2 + 1;
+
+            // Move tooltip
+            state.toolTipElem.style.top = relPos.y + 'px';
+            state.toolTipElem.style.left = relPos.x + 'px';
+        } else {
+            delete state.clickObj;
+        }
+
+        function getOffset(el) {
+            var rect = el.getBoundingClientRect(),
+                scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+                scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
         }
     }, false);
+    state.renderer.domElement.addEventListener("mousedown", function (ev) {
+        state.mousedown = true;
+        state.clickObj = state.hoverObj;
+    }, false);
 
-    state.container.addEventListener("mouseup", ev => {
+    state.renderer.domElement.addEventListener("mouseup", function (ev) {
         if (state.clickObj) {
             state.onClick(state.clickObj);
             delete state.clickObj;
         }
         state.mousedown = false;
     }, false);
-
-      // Setup renderer, camera and controls
-    state.renderer = new three.WebGLRenderer({ alpha: true });
-    state.renderer.setClearColor(new three.Color(state.backgroundColor), tinycolor(state.backgroundColor).getAlpha());
-    state.container.appendChild(state.renderer.domElement);
 
     state.tbControls = new ThreeTrackballControls(state.camera, state.renderer.domElement);
     state.tbControls.minDistance = 0.1;
