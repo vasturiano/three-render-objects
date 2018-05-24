@@ -62,17 +62,20 @@ export default Kapsule({
         state.tbControls.update();
         state.renderer.render(state.scene, state.camera);
 
-        if (!state.mousedown && state.enablePointerInteraction) {
+        if (state.enablePointerInteraction) {
           // Update tooltip and trigger onHover events
-          const raycaster = new three.Raycaster();
-          raycaster.linePrecision = state.lineHoverPrecision;
+          let topObject = null;
+          if (!state.tbDragging) {
+            const raycaster = new three.Raycaster();
+            raycaster.linePrecision = state.lineHoverPrecision;
 
-          raycaster.setFromCamera(state.mousePos, state.camera);
-          const intersects = raycaster.intersectObjects(state.objects, true)
-            .map(({ object }) => object)
-            .sort(state.hoverOrderComparator);
+            raycaster.setFromCamera(state.mousePos, state.camera);
+            const intersects = raycaster.intersectObjects(state.objects, true)
+              .map(({ object }) => object)
+              .sort(state.hoverOrderComparator);
 
-          const topObject = intersects.length ? intersects[0] : null;
+            topObject = (!state.tbDragging && intersects.length) ? intersects[0] : null;
+          }
 
           if (topObject !== state.hoverObj) {
             state.onHover(topObject, state.hoverObj);
@@ -171,7 +174,6 @@ export default Kapsule({
     state.mousePos.x = -2; // Initialize off canvas
     state.mousePos.y = -2;
     state.container.addEventListener("mousemove", ev => {
-      delete state.clickObj;
       if (state.enablePointerInteraction) {
 
         // update the mouse pos
@@ -197,19 +199,15 @@ export default Kapsule({
     }, false);
 
     // Handle click events on objs
-    state.container.addEventListener("mousedown", ev => {
-      state.mousedown = true;
-        if (state.hoverObj) {
-            state.clickObj = state.hoverObj;
-        }
-    }, true);
+    state.container.addEventListener("click", ev => {
+      if (state.ignoreOneClick) {
+        state.ignoreOneClick = false; // because of tbControls end event
+        return;
+      }
 
-    state.container.addEventListener("mouseup", ev => {
-        if (state.clickObj) {
-            state.onClick(state.clickObj);
-            delete state.clickObj;
+        if (state.hoverObj) {
+        state.onClick(state.hoverObj);
         }
-        state.mousedown = false;
     }, false);
 
     // Setup renderer, camera and controls
@@ -220,6 +218,17 @@ export default Kapsule({
     state.tbControls = new ThreeTrackballControls(state.camera, state.renderer.domElement);
     state.tbControls.minDistance = 0.1;
     state.tbControls.maxDistance = 50000;
+    state.tbControls.addEventListener('start', () => state.tbEngaged = true);
+    state.tbControls.addEventListener('change', () => {
+      if (state.tbEngaged) {
+        state.tbDragging = true;
+        state.ignoreOneClick = true;
+      }
+    });
+    state.tbControls.addEventListener('end', () => {
+      state.tbEngaged = false;
+      state.tbDragging = false;
+    });
 
     state.renderer.setSize(state.width, state.height);
     state.camera.position.z = 1000;
