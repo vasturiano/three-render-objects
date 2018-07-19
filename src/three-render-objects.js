@@ -48,7 +48,15 @@ export default Kapsule({
       state.prevObjs = objs;
       objs.forEach(obj => state.scene.add(obj)); // Add to scene
     }, triggerUpdate: false },
-    enablePointerInteraction: { default: true, onChange(_, state) { state.hoverObj = null; }, triggerUpdate: false },
+    enablePointerInteraction: {
+      default: true,
+      onChange(_, state) {
+        // Reset hover state
+        state.hoverObj = null;
+        if (state.toolTipElem) state.toolTipElem.innerHTML = '';
+      },
+      triggerUpdate: false
+    },
     lineHoverPrecision: { default: 1, triggerUpdate: false },
     hoverOrderComparator: { default: () => -1, triggerUpdate: false }, // keep existing order by default
     tooltipContent: { triggerUpdate: false },
