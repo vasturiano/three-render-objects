@@ -39,7 +39,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 
 | Config options | Description | Default |
 | --- | --- | :--: |
-| <b>controlType: <i>str</i> | Which type of control to use to control the camera. Choice between [trackball](https://threejs.org/examples/misc_controls_trackball.html) and [orbit](https://threejs.org/examples/#misc_controls_orbit). | `trackball` |
+| <b>controlType: <i>str</i> | Which type of control to use to control the camera. Choice between [trackball](https://threejs.org/examples/misc_controls_trackball.html), [orbit](https://threejs.org/examples/#misc_controls_orbit) or [fly](https://threejs.org/examples/misc_controls_fly.html). | `trackball` |
 
 ### Data input
 | Method | Description | Default |
