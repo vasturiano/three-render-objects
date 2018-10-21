@@ -38,7 +38,7 @@ import FlyControlsWrapper from 'three-fly-controls';
 const ThreeFlyControls = (FlyControlsWrapper(three), three.FlyControls);
 
 import tinycolor from 'tinycolor2';
-import TweenLite from 'gsap';
+import TWEEN from '@tweenjs/tween.js';
 
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
@@ -106,6 +106,8 @@ export default Kapsule({
             state.hoverObj = topObject;
           }
         }
+
+        TWEEN.update(); // update camera animation tweens
       }
 
       return this;
@@ -124,16 +126,19 @@ export default Kapsule({
         } else {
           const camPos = Object.assign({}, camera.position);
           const camLookAt = getLookAt();
-          const tweenDuration = transitionDuration/1000; // ms > s
 
-          TweenLite.to(camPos, tweenDuration, Object.assign({
-            onUpdate: () => setCameraPos(camPos)
-          }, finalPos));
+          new TWEEN.Tween(camPos)
+            .to(finalPos, transitionDuration)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .onUpdate(setCameraPos)
+            .start();
 
           // Face direction in 1/3rd of time
-          TweenLite.to(camLookAt, tweenDuration/3, Object.assign({
-            onUpdate: () => setLookAt(camLookAt)
-          }, finalLookAt));
+          new TWEEN.Tween(camLookAt)
+            .to(finalLookAt, transitionDuration / 3)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .onUpdate(setLookAt)
+            .start();
         }
 
         return this;
