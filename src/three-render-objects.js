@@ -23,6 +23,8 @@ const three = window.THREE
 import ThreeTrackballControls from 'three-trackballcontrols';
 import OrbitControlsWrapper from 'three-orbit-controls';
 const ThreeOrbitControls = OrbitControlsWrapper(three);
+import FlyControlsWrapper from 'three-fly-controls';
+const ThreeFlyControls = (FlyControlsWrapper(three), three.FlyControls);
 
 import tinycolor from 'tinycolor2';
 import TweenLite from 'gsap';
@@ -174,8 +176,8 @@ export default Kapsule({
     state.container.appendChild(state.navInfo = document.createElement('div'));
     state.navInfo.className = 'scene-nav-info';
     state.navInfo.textContent = {
-        orbit: 'Mouse-drag: rotate, Mouse-wheel: zoom',
-        trackball: 'MOVE mouse & press LEFT/A: rotate, MIDDLE/S: zoom, RIGHT/D: pan',
+        orbit: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
+        trackball: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
         fly: 'WASD: move, R|F: up | down, Q|E: roll, up|down: pitch, left|right: yaw'
       }[controlType] || '';
 
@@ -233,8 +235,13 @@ export default Kapsule({
     // configure controls
     state.controls = new ({
       trackball: ThreeTrackballControls,
-      orbit: ThreeOrbitControls
+      orbit: ThreeOrbitControls,
+      fly: ThreeFlyControls
     }[controlType])(state.camera, state.renderer.domElement);
+
+    if (controlType === 'fly') {
+      state.controls.movementSpeed = 2.5;
+    }
 
     if (controlType === 'trackball' || controlType === 'orbit') {
       state.controls.minDistance = 0.1;
