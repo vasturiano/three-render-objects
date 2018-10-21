@@ -34,10 +34,10 @@ myCanvas(<myDOMElement>)
 
 ### Initialisation
 ```
-ThreeRenderObjects(configProps)(<domElement>)
+ThreeRenderObjects({ configOptions })(<domElement>)
 ```
 
-| Config prop | Description | Default |
+| Config options | Description | Default |
 | --- | --- | :--: |
 | <b>controlType: <i>str</i> | Which type of control to use to control the camera. Choice between [trackball](https://threejs.org/examples/misc_controls_trackball.html) and [orbit](https://threejs.org/examples/#misc_controls_orbit). | `trackball` |
 
