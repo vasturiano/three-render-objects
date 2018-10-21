@@ -21,7 +21,8 @@ const three = window.THREE
 };
 
 import ThreeTrackballControls from 'three-trackballcontrols';
-import ThreeOrbitControls from 'three-orbitcontrols';
+import OrbitControlsWrapper from 'three-orbit-controls';
+const ThreeOrbitControls = OrbitControlsWrapper(three);
 
 import tinycolor from 'tinycolor2';
 import TweenLite from 'gsap';
@@ -44,12 +45,6 @@ export default Kapsule({
       triggerUpdate: false
     },
     showNavInfo: { default: true },
-    controlType: {
-      default: 'trackball', // trackball / orbit
-      onChange: (controlType, state) => Object.entries(state.allControls || {}).forEach(([ type, controls ]) => {
-        controls.enabled = type === controlType;
-      })
-    },
     objects: { default: [], onChange(objs, state) {
       (state.prevObjs || []).forEach(obj => state.scene.remove(obj)); // Clear the place
       state.prevObjs = objs;
@@ -74,7 +69,7 @@ export default Kapsule({
   methods: {
     tick: function(state) {
       if (state.initialised) {
-        Object.values(state.allControls).forEach(controls => controls.update && controls.update());
+        state.controls.update && state.controls.update();
         state.renderer.render(state.scene, state.camera);
 
         if (state.enablePointerInteraction) {
@@ -144,7 +139,7 @@ export default Kapsule({
       }
 
       function setLookAt(lookAt) {
-        state.allControls.trackball.target = new three.Vector3(lookAt.x, lookAt.y, lookAt.z);
+        state.controls.target = new three.Vector3(lookAt.x, lookAt.y, lookAt.z);
       }
 
       function getLookAt() {
@@ -158,8 +153,8 @@ export default Kapsule({
     renderer: state => state.renderer,
     scene: state => state.scene,
     camera: state => state.camera,
-    controls: state => state.allControls[state.controlType],
-    tbControls: state => state.allControls.trackball // to be deprecated
+    controls: state => state.controls,
+    tbControls: state => state.controls // to be deprecated
   },
 
   stateInit: () => ({
@@ -167,7 +162,7 @@ export default Kapsule({
     camera: new three.PerspectiveCamera()
   }),
 
-  init(domNode, state) {
+  init(domNode, state, { controlType = 'trackball' }) {
     // Wipe DOM
     domNode.innerHTML = '';
 
@@ -178,6 +173,11 @@ export default Kapsule({
     // Add nav info section
     state.container.appendChild(state.navInfo = document.createElement('div'));
     state.navInfo.className = 'scene-nav-info';
+    state.navInfo.textContent = {
+        orbit: 'Mouse-drag: rotate, Mouse-wheel: zoom',
+        trackball: 'MOVE mouse & press LEFT/A: rotate, MIDDLE/S: zoom, RIGHT/D: pan',
+        fly: 'WASD: move, R|F: up | down, Q|E: roll, up|down: pitch, left|right: yaw'
+      }[controlType] || '';
 
     // Setup tooltip
     state.toolTipElem = document.createElement('div');
@@ -230,31 +230,27 @@ export default Kapsule({
     state.renderer.setClearColor(new three.Color(state.backgroundColor), tinycolor(state.backgroundColor).getAlpha());
     state.container.appendChild(state.renderer.domElement);
 
-    state.allControls = Object.assign({},
-      ...Object.entries({
-        orbit: ThreeOrbitControls,
-        trackball: ThreeTrackballControls
-      }).map(([type, cls]) => ({ [type]: new cls(state.camera, state.renderer.domElement)}))
-    );
+    // configure controls
+    state.controls = new ({
+      trackball: ThreeTrackballControls,
+      orbit: ThreeOrbitControls
+    }[controlType])(state.camera, state.renderer.domElement);
 
-    Object.entries(state.allControls).forEach(([ type, controls ]) => {
-      controls.enabled = type === state.controlType;
-      if (type === 'trackball' || type === 'orbit') {
-        controls.minDistance = 0.1;
-        controls.maxDistance = 50000;
-        controls.addEventListener('start', () => state.controlsEngaged = true);
-        controls.addEventListener('change', () => {
-          if (state.controlsEngaged) {
-            state.controlsDragging = true;
-            state.ignoreOneClick = true;
-          }
-        });
-        controls.addEventListener('end', () => {
-          state.controlsEngaged = false;
-          state.controlsDragging = false;
-        });
-      }
-    });
+    if (controlType === 'trackball' || controlType === 'orbit') {
+      state.controls.minDistance = 0.1;
+      state.controls.maxDistance = 50000;
+      state.controls.addEventListener('start', () => state.controlsEngaged = true);
+      state.controls.addEventListener('change', () => {
+        if (state.controlsEngaged) {
+          state.controlsDragging = true;
+          state.ignoreOneClick = true;
+        }
+      });
+      state.controls.addEventListener('end', () => {
+        state.controlsEngaged = false;
+        state.controlsDragging = false;
+      });
+    }
 
     state.renderer.setSize(state.width, state.height);
     state.camera.position.z = 1000;
@@ -274,10 +270,5 @@ export default Kapsule({
     }
 
     state.navInfo.style.display = state.showNavInfo ? null : 'none';
-    state.navInfo.textContent = {
-      orbit: 'Mouse-drag: rotate, Mouse-wheel: zoom',
-      trackball: 'MOVE mouse & press LEFT/A: rotate, MIDDLE/S: zoom, RIGHT/D: pan',
-      fly: 'WASD: move, R|F: up | down, Q|E: roll, up|down: pitch, left|right: yaw'
-    }[state.controlType] || '';
   }
 });
