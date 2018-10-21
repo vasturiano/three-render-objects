@@ -49,11 +49,12 @@ myCanvas(<myDOMElement>)
 | Method | Description | Default |
 | --- | --- | :--: |
 | <b>tick() | Re-render all the objects on the canvas. Essentially this method should be called at every frame, and can be used to control the animation ticks. ||
+| <b>controlType([<i>str</i>]) | Getter/setter for which type of control to use to control the camera. Choice between [trackball](https://threejs.org/examples/misc_controls_trackball.html) and [orbit](https://threejs.org/examples/#misc_controls_orbit). | `trackball` |
 | <b>cameraPosition</b>([<i>{x,y,z}</i>], [<i>lookAt</i>], [<i>ms</i>]) | Getter/setter for the camera position, in terms of `x`, `y`, `z` coordinates. Each of the coordinates is optional, allowing for motion in just some dimensions. The optional second argument can be used to define the direction that the camera should aim at, in terms of an `{x,y,z}` point in the 3D space at the distance of `1000` away from the camera. The 3rd optional argument defines the duration of the transition (in <i>ms</i>) to animate the camera motion. A value of `0` (default) moves the camera immediately to the final position. | By default the camera will face the center of the graph at a `z` distance of `1000`. |
 | <b>renderer</b>() | Access the [WebGL renderer](https://threejs.org/docs/#api/renderers/WebGLRenderer) object. || 
 | <b>camera</b>() | Access the [perspective camera](https://threejs.org/docs/#api/cameras/PerspectiveCamera) object. || 
 | <b>scene</b>() | Access the [Scene](https://threejs.org/docs/#api/scenes/Scene) object. ||
-| <b>tbControls</b>() | Access the [Trackball Controls](https://threejs.org/examples/misc_controls_trackball.html) object. ||
+| <b>controls</b>() | Access the camera controls object. ||
 
 ### Interaction
 | Method | Description | Default |

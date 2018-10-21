@@ -21,6 +21,7 @@ const three = window.THREE
 };
 
 import ThreeTrackballControls from 'three-trackballcontrols';
+import ThreeOrbitControls from 'three-orbitcontrols';
 
 import tinycolor from 'tinycolor2';
 import TweenLite from 'gsap';
@@ -43,6 +44,12 @@ export default Kapsule({
       triggerUpdate: false
     },
     showNavInfo: { default: true },
+    controlType: {
+      default: 'trackball', // trackball / orbit
+      onChange: (controlType, state) => Object.entries(state.allControls || {}).forEach(([ type, controls ]) => {
+        controls.enabled = type === controlType;
+      })
+    },
     objects: { default: [], onChange(objs, state) {
       (state.prevObjs || []).forEach(obj => state.scene.remove(obj)); // Clear the place
       state.prevObjs = objs;
@@ -67,13 +74,13 @@ export default Kapsule({
   methods: {
     tick: function(state) {
       if (state.initialised) {
-        state.tbControls.update();
+        Object.values(state.allControls).forEach(controls => controls.update && controls.update());
         state.renderer.render(state.scene, state.camera);
 
         if (state.enablePointerInteraction) {
           // Update tooltip and trigger onHover events
           let topObject = null;
-          if (!state.tbDragging) {
+          if (!state.controlsDragging) {
             const raycaster = new three.Raycaster();
             raycaster.linePrecision = state.lineHoverPrecision;
 
@@ -82,7 +89,7 @@ export default Kapsule({
               .map(({ object }) => object)
               .sort(state.hoverOrderComparator);
 
-            topObject = (!state.tbDragging && intersects.length) ? intersects[0] : null;
+            topObject = (!state.controlsDragging && intersects.length) ? intersects[0] : null;
           }
 
           if (topObject !== state.hoverObj) {
@@ -137,7 +144,7 @@ export default Kapsule({
       }
 
       function setLookAt(lookAt) {
-        state.tbControls.target = new three.Vector3(lookAt.x, lookAt.y, lookAt.z);
+        state.allControls.trackball.target = new three.Vector3(lookAt.x, lookAt.y, lookAt.z);
       }
 
       function getLookAt() {
@@ -151,7 +158,8 @@ export default Kapsule({
     renderer: state => state.renderer,
     scene: state => state.scene,
     camera: state => state.camera,
-    tbControls: state => state.tbControls
+    controls: state => state.allControls[state.controlType],
+    tbControls: state => state.allControls.trackball // to be deprecated
   },
 
   stateInit: () => ({
@@ -159,7 +167,7 @@ export default Kapsule({
     camera: new three.PerspectiveCamera()
   }),
 
-  init: (domNode, state) => {
+  init(domNode, state) {
     // Wipe DOM
     domNode.innerHTML = '';
 
@@ -170,7 +178,6 @@ export default Kapsule({
     // Add nav info section
     state.container.appendChild(state.navInfo = document.createElement('div'));
     state.navInfo.className = 'scene-nav-info';
-    state.navInfo.textContent = "MOVE mouse & press LEFT/A: rotate, MIDDLE/S: zoom, RIGHT/D: pan";
 
     // Setup tooltip
     state.toolTipElem = document.createElement('div');
@@ -209,7 +216,7 @@ export default Kapsule({
     // Handle click events on objs
     state.container.addEventListener("click", ev => {
       if (state.ignoreOneClick) {
-        state.ignoreOneClick = false; // because of tbControls end event
+        state.ignoreOneClick = false; // because of controls end event
         return;
       }
 
@@ -223,19 +230,30 @@ export default Kapsule({
     state.renderer.setClearColor(new three.Color(state.backgroundColor), tinycolor(state.backgroundColor).getAlpha());
     state.container.appendChild(state.renderer.domElement);
 
-    state.tbControls = new ThreeTrackballControls(state.camera, state.renderer.domElement);
-    state.tbControls.minDistance = 0.1;
-    state.tbControls.maxDistance = 50000;
-    state.tbControls.addEventListener('start', () => state.tbEngaged = true);
-    state.tbControls.addEventListener('change', () => {
-      if (state.tbEngaged) {
-        state.tbDragging = true;
-        state.ignoreOneClick = true;
+    state.allControls = Object.assign({},
+      ...Object.entries({
+        orbit: ThreeOrbitControls,
+        trackball: ThreeTrackballControls
+      }).map(([type, cls]) => ({ [type]: new cls(state.camera, state.renderer.domElement)}))
+    );
+
+    Object.entries(state.allControls).forEach(([ type, controls ]) => {
+      controls.enabled = type === state.controlType;
+      if (type === 'trackball' || type === 'orbit') {
+        controls.minDistance = 0.1;
+        controls.maxDistance = 50000;
+        controls.addEventListener('start', () => state.controlsEngaged = true);
+        controls.addEventListener('change', () => {
+          if (state.controlsEngaged) {
+            state.controlsDragging = true;
+            state.ignoreOneClick = true;
+          }
+        });
+        controls.addEventListener('end', () => {
+          state.controlsEngaged = false;
+          state.controlsDragging = false;
+        });
       }
-    });
-    state.tbControls.addEventListener('end', () => {
-      state.tbEngaged = false;
-      state.tbDragging = false;
     });
 
     state.renderer.setSize(state.width, state.height);
@@ -245,7 +263,7 @@ export default Kapsule({
     window.scene = state.scene;
   },
 
-  update: function updateFn(state) {
+  update(state) {
     // resize canvas
     if (state.width && state.height) {
       state.container.style.width = state.width;
@@ -256,5 +274,10 @@ export default Kapsule({
     }
 
     state.navInfo.style.display = state.showNavInfo ? null : 'none';
+    state.navInfo.textContent = {
+      orbit: 'Mouse-drag: rotate, Mouse-wheel: zoom',
+      trackball: 'MOVE mouse & press LEFT/A: rotate, MIDDLE/S: zoom, RIGHT/D: pan',
+      fly: 'WASD: move, R|F: up | down, Q|E: roll, up|down: pitch, left|right: yaw'
+    }[state.controlType] || '';
   }
 });

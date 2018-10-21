@@ -36,6 +36,7 @@
     "accessor-fn": "^1.2.2",
     "gsap": "1.20.4",
     "kapsule": "^1.9.1",
+    "three-orbitcontrols": "^2.96.3",
     "three-trackballcontrols": "^0.0.7",
     "tinycolor2": "^1.4.1"
   },

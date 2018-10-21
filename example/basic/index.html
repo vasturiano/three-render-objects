@@ -3,8 +3,8 @@
 
   <script src="//unpkg.com/three"></script>
 
-  <script src="//unpkg.com/three-render-objects"></script>
-  <!--<script src="../../dist/three-render-objects.js"></script>-->
+  <!--<script src="//unpkg.com/three-render-objects"></script>-->
+  <script src="../../dist/three-render-objects.js"></script>
 </head>
 
 <body>
@@ -26,6 +26,7 @@
 
     const ObjRender = ThreeRenderObjects()
       (document.getElementById('myscene'))
+      .controlType('trackballsdf')
       .objects(objs);
 
     (function animate() {
