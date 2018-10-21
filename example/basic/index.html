@@ -3,8 +3,8 @@
 
   <script src="//unpkg.com/three"></script>
 
-  <!--<script src="//unpkg.com/three-render-objects"></script>-->
-  <script src="../../dist/three-render-objects.js"></script>
+  <script src="//unpkg.com/three-render-objects"></script>
+  <!--<script src="../../dist/three-render-objects.js"></script>-->
 </head>
 
 <body>
@@ -24,9 +24,8 @@
       ['x', 'y', 'z'].forEach(dim => obj.position[dim] = Math.random() * COORD_RANGE * 2 - COORD_RANGE);
     });
 
-    const ObjRender = ThreeRenderObjects()
+    const ObjRender = ThreeRenderObjects({ controlType: 'trackball' })
       (document.getElementById('myscene'))
-      .controlType('trackballsdf')
       .objects(objs);
 
     (function animate() {
