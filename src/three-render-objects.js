@@ -5,7 +5,13 @@ import {
   Raycaster,
   Vector2,
   Vector3,
-  Color
+  Color,
+
+  // required for various controls
+  EventDispatcher,
+  MOUSE,
+  Quaternion,
+  Spherical
 } from 'three';
 
 const three = window.THREE
@@ -17,7 +23,12 @@ const three = window.THREE
   Raycaster,
   Vector2,
   Vector3,
-  Color
+  Color,
+
+  EventDispatcher,
+  MOUSE,
+  Quaternion,
+  Spherical
 };
 
 import ThreeTrackballControls from 'three-trackballcontrols';
