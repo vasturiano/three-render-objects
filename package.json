@@ -36,11 +36,11 @@
     "@tweenjs/tween.js": "^17.2.0",
     "accessor-fn": "^1.2.2",
     "kapsule": "^1.9.2",
+    "polished": "^2.2.0",
     "three": "^0.97.0",
     "three-fly-controls": "^1.1.0",
     "three-orbit-controls": "^82.1.0",
-    "three-trackballcontrols": "^0.0.7",
-    "tinycolor2": "^1.4.1"
+    "three-trackballcontrols": "^0.0.7"
   },
   "peerDependencies": {
     "three": ">= 0.86"

@@ -37,7 +37,7 @@ const ThreeOrbitControls = OrbitControlsWrapper(three);
 import FlyControlsWrapper from 'three-fly-controls';
 const ThreeFlyControls = (FlyControlsWrapper(three), three.FlyControls);
 
-import tinycolor from 'tinycolor2';
+import { parseToRgb, opacify } from 'polished';
 import TWEEN from '@tweenjs/tween.js';
 
 import accessorFn from 'accessor-fn';
@@ -51,8 +51,7 @@ export default Kapsule({
       default: '#000011',
       onChange(bckgColor, state) {
         if (state.renderer) {
-          const alpha = tinycolor(bckgColor).getAlpha();
-          state.renderer.setClearColor(new three.Color(bckgColor), alpha);
+          state.renderer.setClearColor(new three.Color(opacify(1, bckgColor)), parseToRgb(bckgColor).alpha || 1);
         }
       },
       triggerUpdate: false
@@ -245,7 +244,7 @@ export default Kapsule({
 
     // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer({ alpha: true });
-    state.renderer.setClearColor(new three.Color(state.backgroundColor), tinycolor(state.backgroundColor).getAlpha());
+    state.renderer.setClearColor(new three.Color(opacify(1, state.backgroundColor)), parseToRgb(state.backgroundColor).alpha || 1);
     state.container.appendChild(state.renderer.domElement);
 
     // configure controls
