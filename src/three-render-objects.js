@@ -51,7 +51,9 @@ export default Kapsule({
       default: '#000011',
       onChange(bckgColor, state) {
         if (state.renderer) {
-          state.renderer.setClearColor(new three.Color(opacify(1, bckgColor)), parseToRgb(bckgColor).alpha || 1);
+          let alpha = parseToRgb(bckgColor).alpha;
+          if (alpha === undefined) alpha = 1;
+          state.renderer.setClearColor(new three.Color(opacify(1, bckgColor)), alpha);
         }
       },
       triggerUpdate: false
@@ -244,7 +246,9 @@ export default Kapsule({
 
     // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer({ alpha: true });
-    state.renderer.setClearColor(new three.Color(opacify(1, state.backgroundColor)), parseToRgb(state.backgroundColor).alpha || 1);
+    let bckgAlpha = parseToRgb(state.backgroundColor).alpha;
+    if (bckgAlpha === undefined) bckgAlpha = 1;
+    state.renderer.setClearColor(new three.Color(opacify(1, state.backgroundColor)), bckgAlpha);
     state.container.appendChild(state.renderer.domElement);
 
     // configure controls
