@@ -7,13 +7,13 @@ import babel from 'rollup-plugin-babel';
 import { name, homepage, version } from './package.json';
 
 export default {
-  //external: ['three'],
+  external: ['three'],
   input: 'src/index.js',
   output: [
     {
       format: 'umd',
       name: 'ThreeRenderObjects',
-      //globals: { three: 'THREE' },
+      globals: { three: 'THREE' },
       file: `dist/${name}.js`,
       sourcemap: true,
       banner: `// Version ${version} ${name} - ${homepage}`

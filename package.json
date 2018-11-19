@@ -37,7 +37,6 @@
     "accessor-fn": "^1.2.2",
     "kapsule": "^1.9.2",
     "polished": "^2.3.0",
-    "three": "^0.97.0",
     "three-fly-controls": "^1.1.0",
     "three-orbit-controls": "^82.1.0",
     "three-trackballcontrols": "^0.0.7"
