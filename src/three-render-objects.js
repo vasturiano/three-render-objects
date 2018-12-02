@@ -181,7 +181,7 @@ export default Kapsule({
     camera: new three.PerspectiveCamera()
   }),
 
-  init(domNode, state, { controlType = 'trackball' }) {
+  init(domNode, state, { controlType = 'trackball', rendererConfig = {} }) {
     // Wipe DOM
     domNode.innerHTML = '';
 
@@ -245,7 +245,7 @@ export default Kapsule({
     }, false);
 
     // Setup renderer, camera and controls
-    state.renderer = new three.WebGLRenderer({ alpha: true });
+    state.renderer = new three.WebGLRenderer(Object.assign({ alpha: true }, rendererConfig));
     let bckgAlpha = parseToRgb(state.backgroundColor).alpha;
     if (bckgAlpha === undefined) bckgAlpha = 1;
     state.renderer.setClearColor(new three.Color(opacify(1, state.backgroundColor)), bckgAlpha);
