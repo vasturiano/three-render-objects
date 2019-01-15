@@ -246,6 +246,8 @@ export default Kapsule({
 
     // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer(Object.assign({ alpha: true }, rendererConfig));
+    state.renderer.setPixelRatio(window.devicePixelRatio);
+
     let bckgAlpha = parseToRgb(state.backgroundColor).alpha;
     if (bckgAlpha === undefined) bckgAlpha = 1;
     state.renderer.setClearColor(new three.Color(opacify(1, state.backgroundColor)), bckgAlpha);
