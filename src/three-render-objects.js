@@ -249,10 +249,10 @@ export default Kapsule({
     state.container.addEventListener('contextmenu', ev => {
       if (!state.onRightClick) return true; // default contextmenu behavior
 
+      ev.preventDefault();
       if (state.hoverObj) {
         state.onRightClick(state.hoverObj);
       }
-
       return false;
     }, false);
 
