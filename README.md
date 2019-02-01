@@ -68,7 +68,8 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 ### Interaction
 | Method | Description | Default |
 | --- | --- | :--: |
-| <b>onClick</b>(<i>fn</i>) | Callback function for object clicks. The object is included as single argument `onClick(object)`. | - |
+| <b>onClick</b>(<i>fn</i>) | Callback function for object clicks with left mouse button. The object is included as single argument `onClick(object)`. | - |
+| <b>onRightClick</b>(<i>fn</i>) | Callback function for object right-clicks. The object is included as single argument `onRightClick(object)`. | - |
 | <b>onHover</b>(<i>fn</i>) | Callback function for object mouse over events. The object (or `null` if there's no node under the mouse line of sight) is included as the first argument, and the previous hovered object (or null) as second argument: `onHover(obj, prevObj)`. | - |
 | <b>hoverOrderComparator</b>([<i>fn</i>]) | Getter/setter for the comparator function to use when hovering over multiple objects under the same line of sight. This function can be used to prioritize hovering some objects over others. | By default, hovering priority is based solely on camera proximity (closes object wins). |
 | <b>lineHoverPrecision</b>([<i>int</i>]) | Getter/setter for the precision to use when detecting hover events over [Line](https://threejs.org/docs/#api/objects/Line) objects. | 1 |

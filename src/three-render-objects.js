@@ -77,7 +77,8 @@ export default Kapsule({
     hoverOrderComparator: { default: () => -1, triggerUpdate: false }, // keep existing order by default
     tooltipContent: { triggerUpdate: false },
     onHover: { default: () => {}, triggerUpdate: false },
-    onClick: { default: () => {}, triggerUpdate: false }
+    onClick: { default: () => {}, triggerUpdate: false },
+    onRightClick: { triggerUpdate: false }
   },
 
   methods: {
@@ -233,15 +234,26 @@ export default Kapsule({
     }, false);
 
     // Handle click events on objs
-    state.container.addEventListener("click", ev => {
+    state.container.addEventListener('click', ev => {
       if (state.ignoreOneClick) {
         state.ignoreOneClick = false; // because of controls end event
         return;
       }
 
-        if (state.hoverObj) {
+      if (state.hoverObj) {
         state.onClick(state.hoverObj);
-        }
+      }
+    }, false);
+
+    // Handle right-click events
+    state.container.addEventListener('contextmenu', ev => {
+      if (!state.onRightClick) return true; // default contextmenu behavior
+
+      if (state.hoverObj) {
+        state.onRightClick(state.hoverObj);
+      }
+
+      return false;
     }, false);
 
     // Setup renderer, camera and controls
