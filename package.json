@@ -25,15 +25,20 @@
   "bugs": {
     "url": "https://github.com/vasturiano/three-render-objects/issues"
   },
+  "files": [
+    "src/**/*",
+    "dist/**/*",
+    "example/**/*"
+  ],
   "scripts": {
     "build": "rimraf dist && rollup -c",
-    "watch": "rollup -c -w",
+    "dev": "rollup -c -w",
     "minify": "uglifyjs dist/three-render-objects.js -o dist/three-render-objects.min.js -c -m --comments '/Version/'",
     "build-module": "rollup -c rollup.config.module.js",
     "prepare": "npm run build && npm run minify && npm run build-module"
   },
   "dependencies": {
-    "@tweenjs/tween.js": "^17.2.0",
+    "@tweenjs/tween.js": "^17.3.0",
     "accessor-fn": "^1.2.2",
     "kapsule": "^1.9.2",
     "polished": "^2.3.3",
@@ -46,17 +51,17 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-class-properties": "^7.2.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
-    "@babel/preset-env": "^7.2.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
+    "@babel/preset-env": "^7.3.1",
     "postcss-nested": "^4.1.1",
     "postcss-simple-vars": "^5.0.1",
     "rimraf": "^2.6.3",
-    "rollup": "^1.1.0",
-    "rollup-plugin-babel": "^4.3.0",
+    "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-postcss": "^1.6.3",
+    "rollup-plugin-postcss": "^2.0.3",
     "rollup-watch": "^4.3.1",
     "uglify-js": "^3.4.9"
   }
