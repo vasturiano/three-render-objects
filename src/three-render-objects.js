@@ -45,8 +45,8 @@ import Kapsule from 'kapsule';
 
 export default Kapsule({
   props: {
-    width: { default: window.innerWidth, onChange(width, state) { isNaN(width) && (state.width = window.innerWidth) } },
-    height: { default: window.innerHeight, onChange(height, state) { isNaN(height) && (state.height = window.innerHeight) } },
+    width: { default: window.innerWidth, onChange(width, state, prevWidth) { isNaN(width) && (state.width = prevWidth) } },
+    height: { default: window.innerHeight, onChange(height, state, prevHeight) { isNaN(height) && (state.height = prevHeight) } },
     backgroundColor: {
       default: '#000011',
       onChange(bckgColor, state) {
