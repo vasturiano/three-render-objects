@@ -293,6 +293,9 @@ export default Kapsule({
     }
 
     state.renderer.setSize(state.width, state.height);
+    state.camera.aspect = state.width/state.height;
+    state.camera.updateProjectionMatrix();
+
     state.camera.position.z = 1000;
     state.camera.far = 50000;
 
