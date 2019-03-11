@@ -198,6 +198,7 @@ export default Kapsule({
         trackball: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
         fly: 'WASD: move, R|F: up | down, Q|E: roll, up|down: pitch, left|right: yaw'
       }[controlType] || '';
+    state.navInfo.style.display = state.showNavInfo ? null : 'none';
 
     // Setup tooltip
     state.toolTipElem = document.createElement('div');
@@ -257,7 +258,7 @@ export default Kapsule({
     }, false);
 
     // Setup renderer, camera and controls
-    state.renderer = new three.WebGLRenderer(Object.assign({ alpha: true }, rendererConfig));
+    state.renderer = new three.WebGLRenderer(Object.assign({ antialias: true, alpha: true }, rendererConfig));
     state.renderer.setPixelRatio(window.devicePixelRatio);
 
     let bckgAlpha = parseToRgb(state.backgroundColor).alpha;
