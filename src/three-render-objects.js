@@ -224,7 +224,7 @@ export default Kapsule({
         // Move tooltip
         state.toolTipElem.style.top = `${relPos.y}px`;
         state.toolTipElem.style.left = `${relPos.x}px`;
-        state.toolTipElem.style.transform = `translate(-${relPos.x / state.width * 100}%, 25px)`; // adjust horizontal position to not exceed canvas boundaries
+        state.toolTipElem.style.transform = `translate(-${relPos.x / state.width * 100}%, 21px)`; // adjust horizontal position to not exceed canvas boundaries
       }
 
       function getOffset(el) {
