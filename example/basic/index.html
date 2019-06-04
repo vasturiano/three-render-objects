@@ -16,8 +16,8 @@
     const COORD_RANGE = 300;
 
     const objs = [...Array(N)].map(() => new THREE.Mesh(
-      new THREE.SphereGeometry(10),
-      new THREE.MeshBasicMaterial({ color: 'red' })
+      new THREE.SphereGeometry(10, 16, 16),
+      new THREE.MeshBasicMaterial({ color: 'red', transparent: true, opacity: 0.6 })
     ));
 
     objs.forEach(obj => {
