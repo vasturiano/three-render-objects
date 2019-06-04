@@ -43,11 +43,13 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>rendererConfig</b>: <i>object</i> | Configuration parameters to pass to the [ThreeJS WebGLRenderer](https://threejs.org/docs/#api/en/renderers/WebGLRenderer) constructor. | `{ antialias: true, alpha: true }` |
 
 ### Data input
+
 | Method | Description | Default |
 | --- | --- | :--: |
 | <b>objects</b>([<i>array</i>]) | Getter/setter for the list of objects to render. Each object should be an instance of [Object3D](https://threejs.org/docs/#api/core/Object3D). | `[]` |
 
 ### Container layout
+
 | Method | Description | Default |
 | --- | --- | :--: |
 | <b>width</b>([<i>px</i>]) | Getter/setter for the canvas width. | *&lt;window width&gt;* |
@@ -56,6 +58,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>showNavInfo</b>([<i>boolean</i>]) | Getter/setter for whether to show the navigation controls footer info. | `true` |
 
 ### Render control
+
 | Method | Description | Default |
 | --- | --- | :--: |
 | <b>tick() | Re-render all the objects on the canvas. Essentially this method should be called at every frame, and can be used to control the animation ticks. ||
@@ -66,6 +69,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>controls</b>() | Access the camera controls object. ||
 
 ### Interaction
+
 | Method | Description | Default |
 | --- | --- | :--: |
 | <b>onClick</b>(<i>fn</i>) | Callback function for object clicks with left mouse button. The object is included as single argument `onClick(object)`. | - |
