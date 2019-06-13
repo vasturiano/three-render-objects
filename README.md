@@ -1,6 +1,9 @@
-# three-render-objects
+three-render-objects
+====================
 
-[![NPM](https://nodei.co/npm/three-render-objects.png?compact=true)](https://nodei.co/npm/three-render-objects/)
+[![NPM package][npm-img]][npm-url]
+[![Build Size][build-size-img]][build-size-url]
+[![Dependencies][dependencies-img]][dependencies-url]
 
 This module offers a convenient way to render [ThreeJS](https://threejs.org/) objects onto a WebGL canvas, with built-in interaction capabilities:
 * hover/click events
@@ -80,3 +83,9 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>tooltipContent</b>([<i>str</i> or <i>fn</i>]) | Object accessor function or attribute for label (shown in tooltip). Supports plain text or HTML content. ||
 | <b>enablePointerInteraction([<i>boolean</i>]) | Getter/setter for whether to enable the mouse tracking events. This activates an internal tracker of the canvas mouse position and enables the functionality of object hover/click and tooltip labels, at the cost of performance. If you're looking for maximum gain in your render performance it's recommended to switch off this property. | `true` |
 
+[npm-img]: https://img.shields.io/npm/v/three-render-objects.svg
+[npm-url]: https://npmjs.org/package/three-render-objects
+[build-size-img]: https://img.shields.io/bundlephobia/minzip/three-render-objects.svg
+[build-size-url]: https://bundlephobia.com/result?p=three-render-objects
+[dependencies-img]: https://img.shields.io/david/vasturiano/three-render-objects.svg
+[dependencies-url]: https://david-dm.org/vasturiano/three-render-objects
