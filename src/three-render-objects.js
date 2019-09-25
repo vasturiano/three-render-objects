@@ -76,6 +76,7 @@ export default Kapsule({
     lineHoverPrecision: { default: 1, triggerUpdate: false },
     hoverOrderComparator: { default: () => -1, triggerUpdate: false }, // keep existing order by default
     tooltipContent: { triggerUpdate: false },
+    hoverDuringDrag: { default: false, triggerUpdate: false },
     onHover: { default: () => {}, triggerUpdate: false },
     onClick: { default: () => {}, triggerUpdate: false },
     onRightClick: { triggerUpdate: false }
@@ -90,7 +91,7 @@ export default Kapsule({
         if (state.enablePointerInteraction) {
           // Update tooltip and trigger onHover events
           let topObject = null;
-          if (!state.controlsDragging) {
+          if (state.hoverDuringDrag || !state.controlsDragging) {
             const raycaster = new three.Raycaster();
             raycaster.linePrecision = state.lineHoverPrecision;
 
@@ -99,7 +100,7 @@ export default Kapsule({
               .map(({ object }) => object)
               .sort(state.hoverOrderComparator);
 
-            topObject = (!state.controlsDragging && intersects.length) ? intersects[0] : null;
+            topObject = intersects.length ? intersects[0] : null;
           }
 
           if (topObject !== state.hoverObj) {

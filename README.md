@@ -82,6 +82,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>lineHoverPrecision</b>([<i>int</i>]) | Getter/setter for the precision to use when detecting hover events over [Line](https://threejs.org/docs/#api/objects/Line) objects. | 1 |
 | <b>tooltipContent</b>([<i>str</i> or <i>fn</i>]) | Object accessor function or attribute for label (shown in tooltip). Supports plain text or HTML content. ||
 | <b>enablePointerInteraction([<i>boolean</i>]) | Getter/setter for whether to enable the mouse tracking events. This activates an internal tracker of the canvas mouse position and enables the functionality of object hover/click and tooltip labels, at the cost of performance. If you're looking for maximum gain in your render performance it's recommended to switch off this property. | `true` |
+| <b>hoverDuringDrag([<i>boolean</i>]) | Getter/setter for whether to trigger hover events while using the controls via pointer dragging.| `false` |
 
 [npm-img]: https://img.shields.io/npm/v/three-render-objects.svg
 [npm-url]: https://npmjs.org/package/three-render-objects
