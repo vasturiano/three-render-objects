@@ -75,8 +75,8 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 
 | Method | Description | Default |
 | --- | --- | :--: |
-| <b>onClick</b>(<i>fn</i>) | Callback function for object clicks with left mouse button. The object (or `null` if there's no object under the mouse line of sight) and the event object are included as the arguments `onClick(object, event)`. | - |
-| <b>onRightClick</b>(<i>fn</i>) | Callback function for object right-clicks. The object (or `null` if there's no object under the mouse line of sight) and the event object are included as the arguments `onRightClick(object, ev)`. | - |
+| <b>onClick</b>(<i>fn</i>) | Callback function for object clicks with left mouse button. The object (or `null` if there's no object under the mouse line of sight) and the event object are included as arguments `onClick(object, event)`. | - |
+| <b>onRightClick</b>(<i>fn</i>) | Callback function for object right-clicks. The object (or `null` if there's no object under the mouse line of sight) and the event object are included as arguments `onRightClick(object, event)`. | - |
 | <b>onHover</b>(<i>fn</i>) | Callback function for object mouse over events. The object (or `null` if there's no object under the mouse line of sight) is included as the first argument, and the previous hovered object (or `null`) as second argument: `onHover(obj, prevObj)`. | - |
 | <b>hoverOrderComparator</b>([<i>fn</i>]) | Getter/setter for the comparator function to use when hovering over multiple objects under the same line of sight. This function can be used to prioritize hovering some objects over others. | By default, hovering priority is based solely on camera proximity (closes object wins). |
 | <b>lineHoverPrecision</b>([<i>int</i>]) | Getter/setter for the precision to use when detecting hover events over [Line](https://threejs.org/docs/#api/objects/Line) objects. | 1 |
