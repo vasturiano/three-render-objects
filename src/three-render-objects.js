@@ -243,7 +243,7 @@ export default Kapsule({
         return;
       }
 
-      state.onClick(state.hoverObj || null); // trigger background clicks with null
+      state.onClick(state.hoverObj || null, ev); // trigger background clicks with null
     }, false);
 
     // Handle right-click events
@@ -251,7 +251,7 @@ export default Kapsule({
       if (!state.onRightClick) return true; // default contextmenu behavior
 
       ev.preventDefault();
-      state.onRightClick(state.hoverObj || null);
+      state.onRightClick(state.hoverObj || null, ev);
       return false;
     }, false);
 
