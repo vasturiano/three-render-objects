@@ -247,12 +247,14 @@ export default Kapsule({
     }, false);
 
     // Handle right-click events
-    state.container.addEventListener('contextmenu', ev => {
-      if (!state.onRightClick) return true; // default contextmenu behavior
-
-      ev.preventDefault();
-      state.onRightClick(state.hoverObj || null, ev);
-      return false;
+    state.container.addEventListener('mouseup', ev => {
+      if (ev.button === 2 && state.onRightClick) {
+        if (state.ignoreOneClick) {
+          state.ignoreOneClick = false; // because of controls end event
+          return;
+        }
+        state.onRightClick(state.hoverObj || null, ev);
+      }
     }, false);
 
     // Setup renderer, camera and controls
