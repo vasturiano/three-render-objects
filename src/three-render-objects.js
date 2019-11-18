@@ -64,6 +64,7 @@ export default Kapsule({
       state.prevObjs = objs;
       objs.forEach(obj => state.scene.add(obj)); // Add to scene
     }, triggerUpdate: false },
+    postProcessingComposer: { triggerUpdate: false },
     enablePointerInteraction: {
       default: true,
       onChange(_, state) {
@@ -86,7 +87,10 @@ export default Kapsule({
     tick: function(state) {
       if (state.initialised) {
         state.controls.update && state.controls.update();
-        state.renderer.render(state.scene, state.camera);
+
+        state.postProcessingComposer
+          ? state.postProcessingComposer.render() // if using postprocessing, render only the output of the
+          : state.renderer.render(state.scene, state.camera);
 
         if (state.enablePointerInteraction) {
           // Update tooltip and trigger onHover events
