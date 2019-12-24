@@ -3,9 +3,14 @@ import {
   Scene,
   PerspectiveCamera,
   Raycaster,
+  TextureLoader,
   Vector2,
   Vector3,
   Color,
+  Mesh,
+  SphereGeometry,
+  MeshBasicMaterial,
+  BackSide,
 
   // required for various controls
   EventDispatcher,
@@ -21,9 +26,14 @@ const three = window.THREE
   Scene,
   PerspectiveCamera,
   Raycaster,
+  TextureLoader,
   Vector2,
   Vector3,
   Color,
+  Mesh,
+  SphereGeometry,
+  MeshBasicMaterial,
+  BackSide,
 
   EventDispatcher,
   MOUSE,
@@ -43,27 +53,17 @@ import TWEEN from '@tweenjs/tween.js';
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
 
+const SKY_RADIUS = 50000;
+
 export default Kapsule({
   props: {
     width: { default: window.innerWidth, onChange(width, state, prevWidth) { isNaN(width) && (state.width = prevWidth) } },
     height: { default: window.innerHeight, onChange(height, state, prevHeight) { isNaN(height) && (state.height = prevHeight) } },
-    backgroundColor: {
-      default: '#000011',
-      onChange(bckgColor, state) {
-        if (state.renderer) {
-          let alpha = parseToRgb(bckgColor).alpha;
-          if (alpha === undefined) alpha = 1;
-          state.renderer.setClearColor(new three.Color(opacify(1, bckgColor)), alpha);
-        }
-      },
-      triggerUpdate: false
-    },
+    backgroundColor: { default: '#000011' },
+    backgroundImageUrl: {},
+    onBackgroundImageLoaded: {},
     showNavInfo: { default: true },
-    objects: { default: [], onChange(objs, state) {
-      (state.prevObjs || []).forEach(obj => state.scene.remove(obj)); // Clear the place
-      state.prevObjs = objs;
-      objs.forEach(obj => state.scene.add(obj)); // Add to scene
-    }, triggerUpdate: false },
+    objects: { default: [] },
     postProcessingComposer: { triggerUpdate: false },
     enablePointerInteraction: {
       default: true,
@@ -265,9 +265,6 @@ export default Kapsule({
     state.renderer = new three.WebGLRenderer(Object.assign({ antialias: true, alpha: true }, rendererConfig));
     state.renderer.setPixelRatio(window.devicePixelRatio);
 
-    let bckgAlpha = parseToRgb(state.backgroundColor).alpha;
-    if (bckgAlpha === undefined) bckgAlpha = 1;
-    state.renderer.setClearColor(new three.Color(opacify(1, state.backgroundColor)), bckgAlpha);
     state.container.appendChild(state.renderer.domElement);
 
     // configure controls
@@ -283,7 +280,7 @@ export default Kapsule({
 
     if (controlType === 'trackball' || controlType === 'orbit') {
       state.controls.minDistance = 0.1;
-      state.controls.maxDistance = 50000;
+      state.controls.maxDistance = SKY_RADIUS;
       state.controls.addEventListener('start', () => state.controlsEngaged = true);
       state.controls.addEventListener('change', () => {
         if (state.controlsEngaged) {
@@ -302,14 +299,20 @@ export default Kapsule({
     state.camera.updateProjectionMatrix();
 
     state.camera.position.z = 1000;
-    state.camera.far = 50000;
+    state.camera.far = SKY_RADIUS * 2;
+
+    // add sky
+    state.scene.add(state.skysphere = new three.Mesh(
+      new three.SphereGeometry(SKY_RADIUS),
+    ));
+    state.skysphere.visible = false;
 
     window.scene = state.scene;
   },
 
-  update(state) {
+  update(state, changedProps) {
     // resize canvas
-    if (state.width && state.height) {
+    if (state.width && state.height && (changedProps.hasOwnProperty('width') || changedProps.hasOwnProperty('height'))) {
       state.container.style.width = state.width;
       state.container.style.height = state.height;
       state.renderer.setSize(state.width, state.height);
@@ -317,6 +320,33 @@ export default Kapsule({
       state.camera.updateProjectionMatrix();
     }
 
-    state.navInfo.style.display = state.showNavInfo ? null : 'none';
+    if (changedProps.hasOwnProperty('backgroundColor')) {
+      let alpha = parseToRgb(state.backgroundColor).alpha;
+      if (alpha === undefined) alpha = 1;
+      state.renderer.setClearColor(new three.Color(opacify(1, state.backgroundColor)), alpha);
+
+    }
+
+    if (changedProps.hasOwnProperty('backgroundImageUrl')) {
+      if (!state.backgroundImageUrl) {
+        state.skysphere.visible = false;
+        state.skysphere.material.map = null;
+      } else {
+        new three.TextureLoader().load(state.backgroundImageUrl, texture => {
+          state.skysphere.material = new three.MeshBasicMaterial({ map: texture, side: three.BackSide });
+          state.skysphere.visible = true;
+
+          // triggered when background image finishes loading (asynchronously to allow 1 frame to load texture)
+          state.onBackgroundImageLoaded && setTimeout(state.onBackgroundImageLoaded);
+        });
+      }
+    }
+
+    changedProps.hasOwnProperty('showNavInfo') && (state.navInfo.style.display = state.showNavInfo ? null : 'none');
+
+    if (changedProps.hasOwnProperty('objects')) {
+      (changedProps.objects || []).forEach(obj => state.scene.remove(obj)); // Clear the place
+      state.objects.forEach(obj => state.scene.add(obj)); // Add to scene
+    }
   }
 });

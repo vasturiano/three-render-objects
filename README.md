@@ -58,6 +58,8 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>width</b>([<i>px</i>]) | Getter/setter for the canvas width. | *&lt;window width&gt;* |
 | <b>height</b>([<i>px</i>]) | Getter/setter for the canvas height. | *&lt;window height&gt;* |
 | <b>backgroundColor</b>([<i>str</i>]) | Getter/setter for the canvas background color. | `#000011` |
+| <b>backgroundImageUrl</b>([<i>url</i>]) | Getter/setter for the URL of the image to be used as scene background. If no image is provided, the background color is shown instead. | `null` |
+| <b>onBackgroundImageLoaded</b>([<i>fn</i>]) | Callback function triggered when the background image has finished loading asynchronously and is rendered on the scene. ||
 | <b>showNavInfo</b>([<i>boolean</i>]) | Getter/setter for whether to show the navigation controls footer info. | `true` |
 
 ### Render control
