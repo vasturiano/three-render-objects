@@ -53,8 +53,6 @@ import TWEEN from '@tweenjs/tween.js';
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
 
-const SKY_RADIUS = 50000;
-
 export default Kapsule({
   props: {
     width: { default: window.innerWidth, onChange(width, state, prevWidth) { isNaN(width) && (state.width = prevWidth) } },
@@ -63,6 +61,7 @@ export default Kapsule({
     backgroundImageUrl: {},
     onBackgroundImageLoaded: {},
     showNavInfo: { default: true },
+    skyRadius: { default: 50000 },
     objects: { default: [] },
     postProcessingComposer: { triggerUpdate: false },
     enablePointerInteraction: {
@@ -280,7 +279,6 @@ export default Kapsule({
 
     if (controlType === 'trackball' || controlType === 'orbit') {
       state.controls.minDistance = 0.1;
-      state.controls.maxDistance = SKY_RADIUS;
       state.controls.addEventListener('start', () => state.controlsEngaged = true);
       state.controls.addEventListener('change', () => {
         if (state.controlsEngaged) {
@@ -299,12 +297,9 @@ export default Kapsule({
     state.camera.updateProjectionMatrix();
 
     state.camera.position.z = 1000;
-    state.camera.far = SKY_RADIUS * 2;
 
     // add sky
-    state.scene.add(state.skysphere = new three.Mesh(
-      new three.SphereGeometry(SKY_RADIUS),
-    ));
+    state.scene.add(state.skysphere = new three.Mesh());
     state.skysphere.visible = false;
     state.loadComplete = state.scene.visible = !waitForLoadComplete;
 
@@ -321,11 +316,17 @@ export default Kapsule({
       state.camera.updateProjectionMatrix();
     }
 
+    if (changedProps.hasOwnProperty('skyRadius') && state.skyRadius) {
+      state.controls.hasOwnProperty('maxDistance') && (state.controls.maxDistance = state.skyRadius);
+      state.camera.far = state.skyRadius * 2;
+      state.camera.updateProjectionMatrix();
+      state.skysphere.geometry = new three.SphereGeometry(state.skyRadius);
+    }
+
     if (changedProps.hasOwnProperty('backgroundColor')) {
       let alpha = parseToRgb(state.backgroundColor).alpha;
       if (alpha === undefined) alpha = 1;
       state.renderer.setClearColor(new three.Color(opacify(1, state.backgroundColor)), alpha);
-
     }
 
     if (changedProps.hasOwnProperty('backgroundImageUrl')) {
