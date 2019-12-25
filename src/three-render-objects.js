@@ -318,7 +318,7 @@ export default Kapsule({
 
     if (changedProps.hasOwnProperty('skyRadius') && state.skyRadius) {
       state.controls.hasOwnProperty('maxDistance') && (state.controls.maxDistance = state.skyRadius);
-      state.camera.far = state.skyRadius * 2;
+      state.camera.far = state.skyRadius * 2.5;
       state.camera.updateProjectionMatrix();
       state.skysphere.geometry = new three.SphereGeometry(state.skyRadius);
     }
