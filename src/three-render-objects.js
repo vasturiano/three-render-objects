@@ -187,7 +187,7 @@ export default Kapsule({
     camera: new three.PerspectiveCamera()
   }),
 
-  init(domNode, state, { controlType = 'trackball', rendererConfig = {} }) {
+  init(domNode, state, { controlType = 'trackball', rendererConfig = {}, waitForLoadComplete = true }) {
     // Wipe DOM
     domNode.innerHTML = '';
 
@@ -306,6 +306,7 @@ export default Kapsule({
       new three.SphereGeometry(SKY_RADIUS),
     ));
     state.skysphere.visible = false;
+    state.loadComplete = state.scene.visible = !waitForLoadComplete;
 
     window.scene = state.scene;
   },
@@ -331,6 +332,8 @@ export default Kapsule({
       if (!state.backgroundImageUrl) {
         state.skysphere.visible = false;
         state.skysphere.material.map = null;
+
+        !state.loadComplete && finishLoad();
       } else {
         new three.TextureLoader().load(state.backgroundImageUrl, texture => {
           state.skysphere.material = new three.MeshBasicMaterial({ map: texture, side: three.BackSide });
@@ -338,6 +341,8 @@ export default Kapsule({
 
           // triggered when background image finishes loading (asynchronously to allow 1 frame to load texture)
           state.onBackgroundImageLoaded && setTimeout(state.onBackgroundImageLoaded);
+
+          !state.loadComplete && finishLoad();
         });
       }
     }
@@ -347,6 +352,12 @@ export default Kapsule({
     if (changedProps.hasOwnProperty('objects')) {
       (changedProps.objects || []).forEach(obj => state.scene.remove(obj)); // Clear the place
       state.objects.forEach(obj => state.scene.add(obj)); // Add to scene
+    }
+
+    //
+
+    function finishLoad() {
+      state.loadComplete = state.scene.visible = true;
     }
   }
 });
