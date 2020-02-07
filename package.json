@@ -37,10 +37,10 @@
     "prepare": "npm run build && npm run minify && npm run build-module"
   },
   "dependencies": {
-    "@tweenjs/tween.js": "^18.4.2",
+    "@tweenjs/tween.js": "^18.5.0",
     "accessor-fn": "^1.2.2",
     "kapsule": "^1.12.1",
-    "polished": "^3.4.2",
+    "polished": "^3.4.4",
     "three-fly-controls": "^1.1.0",
     "three-orbit-controls": "^82.1.0",
     "three-trackballcontrols": "^0.0.8"
@@ -49,18 +49,18 @@
     "three": "*"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/plugin-proposal-class-properties": "^7.7.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
-    "@babel/preset-env": "^7.7.1",
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
     "postcss-nested": "^4.2.1",
     "postcss-simple-vars": "^5.0.2",
-    "rimraf": "^3.0.0",
-    "rollup": "^1.27.0",
+    "rimraf": "^3.0.1",
+    "rollup": "^1.31.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-postcss": "^2.0.3",
-    "terser": "^4.4.0"
+    "rollup-plugin-postcss": "^2.0.6",
+    "terser": "^4.6.3"
   }
 }
