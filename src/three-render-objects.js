@@ -279,6 +279,7 @@ export default Kapsule({
 
     if (controlType === 'trackball' || controlType === 'orbit') {
       state.controls.minDistance = 0.1;
+      state.controls.maxDistance = state.skyRadius;
       state.controls.addEventListener('start', () => state.controlsEngaged = true);
       state.controls.addEventListener('change', () => {
         if (state.controlsEngaged) {
@@ -317,7 +318,8 @@ export default Kapsule({
     }
 
     if (changedProps.hasOwnProperty('skyRadius') && state.skyRadius) {
-      state.controls.hasOwnProperty('maxDistance') && (state.controls.maxDistance = state.skyRadius);
+      state.controls.hasOwnProperty('maxDistance') && changedProps.skyRadius
+        && (state.controls.maxDistance = state.skyRadius);
       state.camera.far = state.skyRadius * 2.5;
       state.camera.updateProjectionMatrix();
       state.skysphere.geometry = new three.SphereGeometry(state.skyRadius);
