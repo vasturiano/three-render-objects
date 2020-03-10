@@ -96,7 +96,7 @@ export default Kapsule({
           let topObject = null;
           if (state.hoverDuringDrag || !state.controlsDragging) {
             const raycaster = new three.Raycaster();
-            raycaster.linePrecision = state.lineHoverPrecision;
+            raycaster.params.Line.threshold = state.lineHoverPrecision; // set linePrecision
 
             raycaster.setFromCamera(state.mousePos, state.camera);
             const intersects = raycaster.intersectObjects(state.objects, true)
