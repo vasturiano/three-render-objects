@@ -277,8 +277,8 @@ export default Kapsule({
     }[controlType])(state.camera, state.renderer.domElement);
 
     if (controlType === 'fly') {
-      state.controls.movementSpeed = 280;
-      state.controls.rollSpeed = Math.PI / 8;
+      state.controls.movementSpeed = 300;
+      state.controls.rollSpeed = Math.PI / 6;
       state.controls.dragToLook = true;
     }
 
