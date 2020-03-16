@@ -16,7 +16,8 @@ import {
   EventDispatcher,
   MOUSE,
   Quaternion,
-  Spherical
+  Spherical,
+  Clock
 } from 'three';
 
 const three = window.THREE
@@ -38,7 +39,8 @@ const three = window.THREE
   EventDispatcher,
   MOUSE,
   Quaternion,
-  Spherical
+  Spherical,
+  Clock
 };
 
 import ThreeTrackballControls from 'three-trackballcontrols';
@@ -85,7 +87,7 @@ export default Kapsule({
   methods: {
     tick: function(state) {
       if (state.initialised) {
-        state.controls.update && state.controls.update();
+        state.controls.update && state.controls.update(state.clock.getDelta()); // timedelta is required for fly controls
 
         state.postProcessingComposer
           ? state.postProcessingComposer.render() // if using postprocessing, render only the output of the
@@ -183,7 +185,8 @@ export default Kapsule({
 
   stateInit: () => ({
     scene: new three.Scene(),
-    camera: new three.PerspectiveCamera()
+    camera: new three.PerspectiveCamera(),
+    clock: new three.Clock()
   }),
 
   init(domNode, state, { controlType = 'trackball', rendererConfig = {}, waitForLoadComplete = true }) {
@@ -274,7 +277,9 @@ export default Kapsule({
     }[controlType])(state.camera, state.renderer.domElement);
 
     if (controlType === 'fly') {
-      state.controls.movementSpeed = 2.5;
+      state.controls.movementSpeed = 280;
+      state.controls.rollSpeed = Math.PI / 8;
+      state.controls.dragToLook = true;
     }
 
     if (controlType === 'trackball' || controlType === 'orbit') {

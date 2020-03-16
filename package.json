@@ -38,10 +38,10 @@
   },
   "dependencies": {
     "@tweenjs/tween.js": "^18.5.0",
-    "accessor-fn": "^1.2.2",
+    "accessor-fn": "^1.2.3",
     "kapsule": "^1.12.2",
     "polished": "^3.4.4",
-    "three-fly-controls": "^1.1.0",
+    "three-fly-controls": "^2.0.0",
     "three-orbit-controls": "^82.1.0",
     "three-trackballcontrols": "^0.0.8"
   },
