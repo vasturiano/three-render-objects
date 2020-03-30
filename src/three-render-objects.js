@@ -263,6 +263,10 @@ export default Kapsule({
       }
     }, false);
 
+    state.container.addEventListener('contextmenu', ev => {
+      if (state.onRightClick) ev.preventDefault(); // prevent default contextmenu behavior and allow mouseup to fire instead
+    }, false);
+
     // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer(Object.assign({ antialias: true, alpha: true }, rendererConfig));
     state.renderer.setPixelRatio(window.devicePixelRatio);
