@@ -243,22 +243,17 @@ export default Kapsule({
     }, false);
 
     // Handle click events on objs
-    state.container.addEventListener('click', ev => {
+    state.container.addEventListener('mouseup', ev => {
       if (state.ignoreOneClick) {
         state.ignoreOneClick = false; // because of controls end event
         return;
       }
 
-      state.onClick(state.hoverObj || null, ev); // trigger background clicks with null
-    }, false);
+      if (ev.button === 0) { // left-click
+        state.onClick(state.hoverObj || null, ev); // trigger background clicks with null
+      }
 
-    // Handle right-click events
-    state.container.addEventListener('mouseup', ev => {
-      if (ev.button === 2 && state.onRightClick) {
-        if (state.ignoreOneClick) {
-          state.ignoreOneClick = false; // because of controls end event
-          return;
-        }
+      if (ev.button === 2 && state.onRightClick) { // right-click
         state.onRightClick(state.hoverObj || null, ev);
       }
     }, false);
