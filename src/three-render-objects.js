@@ -256,7 +256,7 @@ export default Kapsule({
       if (ev.button === 2 && state.onRightClick) { // right-click
         state.onRightClick(state.hoverObj || null, ev);
       }
-    }, false);
+    }, true); // use capture phase to prevent propagation blocking from controls (specifically for fly)
 
     state.container.addEventListener('contextmenu', ev => {
       if (state.onRightClick) ev.preventDefault(); // prevent default contextmenu behavior and allow mouseup to fire instead
