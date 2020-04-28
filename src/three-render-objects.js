@@ -43,11 +43,9 @@ const three = window.THREE
   Clock
 };
 
-import ThreeTrackballControls from 'three-trackballcontrols';
-import OrbitControlsWrapper from 'three-orbit-controls';
-const ThreeOrbitControls = OrbitControlsWrapper(three);
-import FlyControlsWrapper from 'three-fly-controls';
-const ThreeFlyControls = (FlyControlsWrapper(three), three.FlyControls);
+import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
+import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
 
 import { parseToRgb, opacify } from 'polished';
 import TWEEN from '@tweenjs/tween.js';
