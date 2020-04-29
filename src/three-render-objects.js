@@ -193,7 +193,7 @@ export default Kapsule({
     clock: new three.Clock()
   }),
 
-  init(domNode, state, { cameraType = 'orthographic', controlType = 'trackball', rendererConfig = {}, waitForLoadComplete = true }) {
+  init(domNode, state, { cameraType = 'perspective', controlType = 'trackball', rendererConfig = {}, waitForLoadComplete = true }) {
     // Wipe DOM
     domNode.innerHTML = '';
 
