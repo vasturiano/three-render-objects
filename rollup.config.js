@@ -57,7 +57,13 @@ export default [
         file: `dist/${name}.module.js`
       }
     ],
-    external: [...Object.keys(dependencies || {}), ...Object.keys(peerDependencies || {})],
+    external: [
+      ...Object.keys(dependencies || {}),
+      ...Object.keys(peerDependencies || {}),
+      'three/examples/jsm/controls/TrackballControls.js',
+      'three/examples/jsm/controls/OrbitControls.js',
+      'three/examples/jsm/controls/FlyControls.js'
+    ],
     plugins: [
       postCss({
         plugins: [
