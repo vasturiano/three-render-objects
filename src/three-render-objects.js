@@ -57,9 +57,6 @@ import TWEEN from '@tweenjs/tween.js';
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
 
-const THREE_JS_PERSPECTIVE_CAMERA_FOV_Y_DEFAULT = 50;
-const THREE_JS_PERSPECTIVE_CAMERA_NEAR_DEFAULT = 0.1;
-
 export default Kapsule({
   props: {
     width: { default: window.innerWidth, onChange(width, state, prevWidth) { isNaN(width) && (state.width = prevWidth) } },
@@ -307,9 +304,6 @@ export default Kapsule({
     state.renderer.setSize(state.width, state.height);
 
     // initialize camera
-    if (state.camera.type === 'OrthographicCamera') {
-      state.camera.near = THREE_JS_PERSPECTIVE_CAMERA_NEAR_DEFAULT;
-    }
     state.camera.position.z = 1000;
     updateCamera(state.camera);
 
@@ -371,13 +365,13 @@ export default Kapsule({
       state.objects.forEach(obj => state.scene.add(obj)); // Add to scene
     }
 
-    //
-
     function finishLoad() {
       state.loadComplete = state.scene.visible = true;
     }
   }
 });
+
+const THREE_JS_PERSPECTIVE_CAMERA_FOV_Y_DEFAULT = 50;
 
 function updateCamera(camera) {
   if (camera.type === 'PerspectiveCamera') {
