@@ -2,6 +2,7 @@ import {
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
+  OrthographicCamera,
   Raycaster,
   TextureLoader,
   Vector2,
@@ -26,6 +27,7 @@ const three = window.THREE
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
+  OrthographicCamera,
   Raycaster,
   TextureLoader,
   Vector2,
@@ -181,10 +183,12 @@ export default Kapsule({
     tbControls: state => state.controls // to be deprecated
   },
 
-  stateInit: () => ({
+  stateInit: ({ cameraType = 'perspective' }) => ({
     scene: new three.Scene(),
-    camera: new three.PerspectiveCamera(),
-    clock: new three.Clock()
+    clock: new three.Clock(),
+    camera: cameraType === 'perspective' ?
+      new three.PerspectiveCamera() :
+      new three.OrthographicCamera()
   }),
 
   init(domNode, state, { controlType = 'trackball', rendererConfig = {}, waitForLoadComplete = true }) {
@@ -296,10 +300,10 @@ export default Kapsule({
     }
 
     state.renderer.setSize(state.width, state.height);
-    state.camera.aspect = state.width/state.height;
-    state.camera.updateProjectionMatrix();
 
+    // initialize camera
     state.camera.position.z = 1000;
+    updateCamera(state.camera, state.width, state.height, state.camera.position.z);
 
     // add sky
     state.scene.add(state.skysphere = new three.Mesh());
@@ -315,8 +319,8 @@ export default Kapsule({
       state.container.style.width = state.width;
       state.container.style.height = state.height;
       state.renderer.setSize(state.width, state.height);
-      state.camera.aspect = state.width/state.height;
-      state.camera.updateProjectionMatrix();
+
+      updateCamera(state.camera, state.width, state.height, state.camera.position.z);
     }
 
     if (changedProps.hasOwnProperty('skyRadius') && state.skyRadius) {
@@ -359,10 +363,28 @@ export default Kapsule({
       state.objects.forEach(obj => state.scene.add(obj)); // Add to scene
     }
 
-    //
-
     function finishLoad() {
       state.loadComplete = state.scene.visible = true;
     }
   }
 });
+
+const THREE_JS_PERSPECTIVE_CAMERA_FOV_Y_DEFAULT = 50;
+
+function updateCamera(camera, width, height, depth) {
+  if (camera.type === 'PerspectiveCamera') {
+    camera.aspect = width / height;
+  } else {
+    const aspect = width / height;
+    const height_ortho = depth * 2 * Math.atan(
+      THREE_JS_PERSPECTIVE_CAMERA_FOV_Y_DEFAULT * (Math.PI / 180) / 2
+    );
+    const width_ortho  = height_ortho * aspect;
+
+    camera.left = width_ortho / -2;
+    camera.right = width_ortho / 2;
+    camera.top = height_ortho / 2;
+    camera.bottom = height_ortho / -2;
+  }
+  camera.updateProjectionMatrix();
+}

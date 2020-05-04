@@ -1,6 +1,7 @@
 import { Object3D, WebGLRendererParameters, Scene, Camera, WebGLRenderer } from 'three';
 
 export interface ConfigOptions {
+  cameraType?: 'perspective' | 'orthographic';
   controlType?: 'trackball' | 'orbit' | 'fly';
   rendererConfig?: WebGLRendererParameters;
   waitForLoadComplete?: boolean;
