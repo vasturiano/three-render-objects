@@ -375,7 +375,7 @@ const THREE_JS_PERSPECTIVE_CAMERA_FOV_Y_DEFAULT = 50;
 
 function updateCamera(camera) {
   if (camera.type === 'PerspectiveCamera') {
-    state.camera.aspect = state.width/state.height;
+    state.camera.aspect = state.width / state.height;
   } else {
     const aspect = state.width / state.height;
     const height_ortho = depth * 2 * Math.atan(
