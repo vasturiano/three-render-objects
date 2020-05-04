@@ -305,7 +305,7 @@ export default Kapsule({
 
     // initialize camera
     state.camera.position.z = 1000;
-    updateCamera(state.camera);
+    updateCamera(state.camera, state.width, state.height, state.camera.position.z);
 
     // add sky
     state.scene.add(state.skysphere = new three.Mesh());
@@ -322,7 +322,7 @@ export default Kapsule({
       state.container.style.height = state.height;
       state.renderer.setSize(state.width, state.height);
 
-      updateCamera(state.camera);
+      updateCamera(state.camera, state.width, state.height, state.camera.position.z);
     }
 
     if (changedProps.hasOwnProperty('skyRadius') && state.skyRadius) {
@@ -373,20 +373,20 @@ export default Kapsule({
 
 const THREE_JS_PERSPECTIVE_CAMERA_FOV_Y_DEFAULT = 50;
 
-function updateCamera(camera) {
+function updateCamera(camera, width, height, depth) {
   if (camera.type === 'PerspectiveCamera') {
-    state.camera.aspect = state.width / state.height;
+    camera.aspect = width / height;
   } else {
-    const aspect = state.width / state.height;
+    const aspect = width / height;
     const height_ortho = depth * 2 * Math.atan(
       THREE_JS_PERSPECTIVE_CAMERA_FOV_Y_DEFAULT * (Math.PI / 180) / 2
     );
     const width_ortho  = height_ortho * aspect;
 
-    state.camera.left = width_ortho / -2;
-    state.camera.right = width_ortho / 2;
-    state.camera.top = height_ortho / 2;
-    state.camera.bottom = height_ortho / -2;
+    camera.left = width_ortho / -2;
+    camera.right = width_ortho / 2;
+    camera.top = height_ortho / 2;
+    camera.bottom = height_ortho / -2;
   }
-  state.camera.updateProjectionMatrix();
+  camera.updateProjectionMatrix();
 }
