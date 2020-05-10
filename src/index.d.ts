@@ -1,14 +1,10 @@
 import { Object3D, WebGLRendererParameters, Scene, Camera, WebGLRenderer } from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 
 export interface ConfigOptions {
   controlType?: 'trackball' | 'orbit' | 'fly';
   rendererConfig?: WebGLRendererParameters;
   waitForLoadComplete?: boolean;
-}
-
-interface EffectComposer {
-  // simplified version of
-  render(): void;
 }
 
 type Accessor<In, Out> = Out | string | ((obj: In) => Out);
@@ -46,7 +42,6 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   cameraPosition(): Coords;
   cameraPosition(position: Partial<Coords>, lookAt?: Coords, transitionMs?: number): ChainableInstance;
   postProcessingComposer(): EffectComposer;
-  postProcessingComposer(composer: EffectComposer): ChainableInstance;
   renderer(): WebGLRenderer;
   scene(): Scene;
   camera(): Camera;
