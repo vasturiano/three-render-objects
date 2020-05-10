@@ -62,7 +62,9 @@ export default [
       ...Object.keys(peerDependencies || {}),
       'three/examples/jsm/controls/TrackballControls.js',
       'three/examples/jsm/controls/OrbitControls.js',
-      'three/examples/jsm/controls/FlyControls.js'
+      'three/examples/jsm/controls/FlyControls.js',
+      'three/examples/jsm/postprocessing/EffectComposer.js',
+      'three/examples/jsm/postprocessing/RenderPass.js'
     ],
     plugins: [
       postCss({

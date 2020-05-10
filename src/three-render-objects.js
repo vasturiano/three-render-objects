@@ -47,6 +47,9 @@ import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
 
+import { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+
 import { parseToRgb, opacify } from 'polished';
 import TWEEN from '@tweenjs/tween.js';
 
@@ -63,7 +66,6 @@ export default Kapsule({
     showNavInfo: { default: true },
     skyRadius: { default: 50000 },
     objects: { default: [] },
-    postProcessingComposer: { triggerUpdate: false },
     enablePointerInteraction: {
       default: true,
       onChange(_, state) {
@@ -88,7 +90,7 @@ export default Kapsule({
         state.controls.update && state.controls.update(state.clock.getDelta()); // timedelta is required for fly controls
 
         state.postProcessingComposer
-          ? state.postProcessingComposer.render() // if using postprocessing, render only the output of the
+          ? state.postProcessingComposer.render() // if using postprocessing, switch the output to it
           : state.renderer.render(state.scene, state.camera);
 
         if (state.enablePointerInteraction) {
@@ -177,6 +179,7 @@ export default Kapsule({
     renderer: state => state.renderer,
     scene: state => state.scene,
     camera: state => state.camera,
+    postProcessingComposer: state => state.postProcessingComposer,
     controls: state => state.controls,
     tbControls: state => state.controls // to be deprecated
   },
@@ -266,6 +269,10 @@ export default Kapsule({
 
     state.container.appendChild(state.renderer.domElement);
 
+    // configure post-processing composer
+    state.postProcessingComposer = new ThreeEffectComposer(state.renderer);
+    state.postProcessingComposer.addPass(new ThreeRenderPass(state.scene, state.camera)); // render scene as first pass
+
     // configure controls
     state.controls = new ({
       trackball: ThreeTrackballControls,
@@ -296,6 +303,7 @@ export default Kapsule({
     }
 
     state.renderer.setSize(state.width, state.height);
+    state.postProcessingComposer.setSize(state.width, state.height);
     state.camera.aspect = state.width/state.height;
     state.camera.updateProjectionMatrix();
 
@@ -315,6 +323,7 @@ export default Kapsule({
       state.container.style.width = state.width;
       state.container.style.height = state.height;
       state.renderer.setSize(state.width, state.height);
+      state.postProcessingComposer.setSize(state.width, state.height);
       state.camera.aspect = state.width/state.height;
       state.camera.updateProjectionMatrix();
     }
