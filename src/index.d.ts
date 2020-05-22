@@ -41,6 +41,7 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   tick(): ChainableInstance;
   cameraPosition(): Coords;
   cameraPosition(position: Partial<Coords>, lookAt?: Coords, transitionMs?: number): ChainableInstance;
+  zoomToFit(durationMs?: number, padding?: number): ChainableInstance;
   postProcessingComposer(): EffectComposer;
   renderer(): WebGLRenderer;
   scene(): Scene;
@@ -61,6 +62,9 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   enablePointerInteraction(enable: boolean): ChainableInstance;
   hoverDuringDrag(): boolean;
   hoverDuringDrag(enabled: boolean): ChainableInstance;
+
+  // Utility
+  getBbox(): { x: [number, number], y: [number, number], z: [number, number] };
 }
 
 export type ThreeRenderObjectsInstance = ThreeRenderObjectsGenericInstance<ThreeRenderObjectsInstance>;
