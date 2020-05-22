@@ -6,6 +6,7 @@ import {
   TextureLoader,
   Vector2,
   Vector3,
+  Box3,
   Color,
   Mesh,
   SphereGeometry,
@@ -30,6 +31,7 @@ const three = window.THREE
   TextureLoader,
   Vector2,
   Vector3,
+  Box3,
   Color,
   Mesh,
   SphereGeometry,
@@ -175,6 +177,42 @@ export default Kapsule({
             .add(camera.position)
         );
       }
+    },
+    zoomToFit: function (state, transitionDuration = 0, padding = 10) {
+      // based on https://discourse.threejs.org/t/camera-zoom-to-fit-object/936/24
+      const camera = state.camera;
+      const bbox = this.getBbox();
+
+      const center = new three.Vector3(0, 0, 0); // reset camera aim to center
+      const maxBoxSide = Math.max(...Object.entries(bbox)
+        .map(([coordType, coords]) => Math.max(...coords.map(c => Math.abs(center[coordType] - c))))
+      ) * 2;
+
+      // find distance that fits whole bbox within padded fov
+      const paddedFov = (1 - (padding * 2 / state.height)) * camera.fov;
+      const fitHeightDistance = maxBoxSide / Math.atan(paddedFov * Math.PI / 180);
+      const fitWidthDistance = fitHeightDistance / camera.aspect;
+      const distance = Math.max(fitHeightDistance, fitWidthDistance);
+
+      if (distance > 0) {
+        const newCameraPosition = center.clone()
+          .sub(camera.position)
+          .normalize()
+          .multiplyScalar(-distance);
+
+        this.cameraPosition(newCameraPosition, center, transitionDuration);
+      }
+
+      return this;
+    },
+    getBbox: function (state) {
+      const box = new three.Box3(new three.Vector3(0, 0, 0), new three.Vector3(0, 0, 0));
+      state.objects.forEach(obj => box.expandByObject(obj));
+
+      // extract global x,y,z min/max
+      return  Object.assign(...['x', 'y', 'z'].map(c => ({
+        [c]: [box.min[c], box.max[c]]
+      })));
     },
     renderer: state => state.renderer,
     scene: state => state.scene,

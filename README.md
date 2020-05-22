@@ -70,6 +70,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | --- | --- | :--: |
 | <b>tick() | Re-render all the objects on the canvas. Essentially this method should be called at every frame, and can be used to control the animation ticks. ||
 | <b>cameraPosition</b>([<i>{x,y,z}</i>], [<i>lookAt</i>], [<i>ms</i>]) | Getter/setter for the camera position, in terms of `x`, `y`, `z` coordinates. Each of the coordinates is optional, allowing for motion in just some dimensions. The optional second argument can be used to define the direction that the camera should aim at, in terms of an `{x,y,z}` point in the 3D space at the distance of `1000` away from the camera. The 3rd optional argument defines the duration of the transition (in <i>ms</i>) to animate the camera motion. A value of `0` (default) moves the camera immediately to the final position. | By default the camera will face the center of the graph at a `z` distance of `1000`. |
+| <b>zoomToFit</b>([<i>ms</i>], [<i>px</i>]) | Automatically moves the camera so that all of the objects in the scene become visible within its field of view, while aiming at the scene center (0,0,0). It takes two optional arguments: the first defines the duration of the transition (in ms) to animate the camera motion (default: 0ms), and the second the amount of padding (in px) between the edge of the canvas and the outermost object position (default: 10px). | `(0, 10)` |
 | <b>postProcessingComposer</b>() | Access the [post-processing composer](https://threejs.org/docs/#examples/en/postprocessing/EffectComposer). Use this to add post-processing [rendering effects](https://github.com/mrdoob/three.js/tree/dev/examples/jsm/postprocessing) to the scene. By default the composer has a single pass ([RenderPass](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/RenderPass.js)) that directly renders the scene without any effects. || 
 | <b>renderer</b>() | Access the [WebGL renderer](https://threejs.org/docs/#api/renderers/WebGLRenderer) object. || 
 | <b>camera</b>() | Access the [perspective camera](https://threejs.org/docs/#api/cameras/PerspectiveCamera) object. || 
@@ -88,6 +89,13 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>tooltipContent</b>([<i>str</i> or <i>fn</i>]) | Object accessor function or attribute for label (shown in tooltip). Supports plain text or HTML content. ||
 | <b>enablePointerInteraction([<i>boolean</i>]) | Getter/setter for whether to enable the mouse tracking events. This activates an internal tracker of the canvas mouse position and enables the functionality of object hover/click and tooltip labels, at the cost of performance. If you're looking for maximum gain in your render performance it's recommended to switch off this property. | `true` |
 | <b>hoverDuringDrag([<i>boolean</i>]) | Getter/setter for whether to trigger hover events while using the controls via pointer dragging.| `false` |
+
+###  Utility
+
+| Method | Description |
+| --- | --- |
+| <b>getBbox</b>() | Returns the current bounding box of all the objects in the scene, formatted as `{ x: [<num>, <num>], y: [<num>, <num>], z: [<num>, <num>] }`. |
+
 
 [npm-img]: https://img.shields.io/npm/v/three-render-objects.svg
 [npm-url]: https://npmjs.org/package/three-render-objects
