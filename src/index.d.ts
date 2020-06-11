@@ -42,6 +42,7 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   cameraPosition(): Coords;
   cameraPosition(position: Partial<Coords>, lookAt?: Coords, transitionMs?: number): ChainableInstance;
   zoomToFit(durationMs?: number, padding?: number, objFilter?: (obj: Object3D) => boolean): ChainableInstance;
+  fitToBbox(bbox: { x: [number, number], y: [number, number], z: [number, number] }, durationMs?: number, padding?: number): ChainableInstance;
   postProcessingComposer(): EffectComposer;
   renderer(): WebGLRenderer;
   scene(): Scene;

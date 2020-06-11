@@ -179,9 +179,11 @@ export default Kapsule({
       }
     },
     zoomToFit: function (state, transitionDuration = 0, padding = 10, ...bboxArgs) {
+      return this.fitToBbox(this.getBbox(...bboxArgs), transitionDuration, padding);
+    },
+    fitToBbox: function (state, bbox, transitionDuration = 0, padding = 10) {
       // based on https://discourse.threejs.org/t/camera-zoom-to-fit-object/936/24
       const camera = state.camera;
-      const bbox = this.getBbox(...bboxArgs);
 
       if (bbox) {
         const center = new three.Vector3(0, 0, 0); // reset camera aim to center
