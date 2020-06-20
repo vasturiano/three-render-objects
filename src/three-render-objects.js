@@ -222,6 +222,14 @@ export default Kapsule({
         [c]: [box.min[c], box.max[c]]
       })));
     },
+    getScreenCoords: function(state, x, y, z) {
+      const vec = new three.Vector3(x, y, z);
+      vec.project(this.camera()); // project to the camera plane
+      return { // align relative pos to canvas dimensions
+        x: (vec.x + 1) * state.width / 2,
+        y: -(vec.y - 1) * state.height / 2,
+      };
+    },
     renderer: state => state.renderer,
     scene: state => state.scene,
     camera: state => state.camera,
