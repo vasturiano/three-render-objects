@@ -66,6 +66,7 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
 
   // Utility
   getBbox(objFilter?: (obj: Object3D) => boolean): { x: [number, number], y: [number, number], z: [number, number] };
+  getcreenCoords(x: number, y: number, z: number): { x: number, y: number; };
 }
 
 export type ThreeRenderObjectsInstance = ThreeRenderObjectsGenericInstance<ThreeRenderObjectsInstance>;
