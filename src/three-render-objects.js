@@ -102,7 +102,7 @@ export default Kapsule({
             const raycaster = new three.Raycaster();
             raycaster.params.Line.threshold = state.lineHoverPrecision; // set linePrecision
 
-            raycaster.setFromCamera(state.mousePos, state.camera);
+            raycaster.setFromCamera(state.pointerPos, state.camera);
             const intersects = raycaster.intersectObjects(state.objects, true)
               .map(({ object }) => object)
               .sort(state.hoverOrderComparator);
@@ -267,38 +267,39 @@ export default Kapsule({
     state.toolTipElem.classList.add('scene-tooltip');
     state.container.appendChild(state.toolTipElem);
 
-    // Capture mouse coords on move
-    state.mousePos = new three.Vector2();
-    state.mousePos.x = -2; // Initialize off canvas
-    state.mousePos.y = -2;
-    state.container.addEventListener("mousemove", ev => {
-      if (state.enablePointerInteraction) {
+    // Capture pointer coords on move or touchstart
+    state.pointerPos = new three.Vector2();
+    state.pointerPos.x = -2; // Initialize off canvas
+    state.pointerPos.y = -2;
+    ['pointermove', 'pointerdown'].forEach(evType =>
+      state.container.addEventListener(evType, ev => {
+        if (state.enablePointerInteraction) {
+          // update the pointer pos
+          const offset = getOffset(state.container),
+            relPos = {
+              x: ev.pageX - offset.left,
+              y: ev.pageY - offset.top
+            };
+          state.pointerPos.x = (relPos.x / state.width) * 2 - 1;
+          state.pointerPos.y = -(relPos.y / state.height) * 2 + 1;
 
-        // update the mouse pos
-        const offset = getOffset(state.container),
-          relPos = {
-            x: ev.pageX - offset.left,
-            y: ev.pageY - offset.top
-          };
-        state.mousePos.x = (relPos.x / state.width) * 2 - 1;
-        state.mousePos.y = -(relPos.y / state.height) * 2 + 1;
+          // Move tooltip
+          state.toolTipElem.style.top = `${relPos.y}px`;
+          state.toolTipElem.style.left = `${relPos.x}px`;
+          state.toolTipElem.style.transform = `translate(-${relPos.x / state.width * 100}%, 21px)`; // adjust horizontal position to not exceed canvas boundaries
+        }
 
-        // Move tooltip
-        state.toolTipElem.style.top = `${relPos.y}px`;
-        state.toolTipElem.style.left = `${relPos.x}px`;
-        state.toolTipElem.style.transform = `translate(-${relPos.x / state.width * 100}%, 21px)`; // adjust horizontal position to not exceed canvas boundaries
-      }
-
-      function getOffset(el) {
-        const rect = el.getBoundingClientRect(),
-          scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-          scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
-      }
-    }, false);
+        function getOffset(el) {
+          const rect = el.getBoundingClientRect(),
+            scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+            scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+        }
+      }, false)
+    );
 
     // Handle click events on objs
-    state.container.addEventListener('mouseup', ev => {
+    state.container.addEventListener('pointerup', ev => {
       if (state.ignoreOneClick) {
         state.ignoreOneClick = false; // because of controls end event
         return;
@@ -314,7 +315,7 @@ export default Kapsule({
     }, true); // use capture phase to prevent propagation blocking from controls (specifically for fly)
 
     state.container.addEventListener('contextmenu', ev => {
-      if (state.onRightClick) ev.preventDefault(); // prevent default contextmenu behavior and allow mouseup to fire instead
+      if (state.onRightClick) ev.preventDefault(); // prevent default contextmenu behavior and allow pointerup to fire instead
     }, false);
 
     // Setup renderer, camera and controls
