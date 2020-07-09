@@ -58,6 +58,11 @@ import TWEEN from '@tweenjs/tween.js';
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
 
+// drag interactions shorter or closer than this will be interpreted as regular clicks
+const DRAG_DURATION_THRESHOLD = 150; // ms
+const DRAG_DISTANCE_SQUARE_THRESHOLD = 25;
+const DRAG_ROTATION_SQUARE_THRESHOLD = 0.001;
+
 export default Kapsule({
   props: {
     width: { default: window.innerWidth, onChange(width, state, prevWidth) { isNaN(width) && (state.width = prevWidth) } },
@@ -81,6 +86,7 @@ export default Kapsule({
     hoverOrderComparator: { default: () => -1, triggerUpdate: false }, // keep existing order by default
     tooltipContent: { triggerUpdate: false },
     hoverDuringDrag: { default: false, triggerUpdate: false },
+    clickAfterDrag: { default: false, triggerUpdate: false },
     onHover: { default: () => {}, triggerUpdate: false },
     onClick: { default: () => {}, triggerUpdate: false },
     onRightClick: { triggerUpdate: false }
@@ -344,11 +350,24 @@ export default Kapsule({
     if (controlType === 'trackball' || controlType === 'orbit') {
       state.controls.minDistance = 0.1;
       state.controls.maxDistance = state.skyRadius;
-      state.controls.addEventListener('start', () => state.controlsEngaged = true);
-      state.controls.addEventListener('change', () => {
+      state.controls.addEventListener('start', () => {
+        state.controlsEngaged = true;
+        state._cameraPositionBeforeMove = state.camera.position.clone();
+        state._cameraRotationBeforeMove = state.camera.rotation.toVector3();
+        state._cameraMoveStartTime = +new Date();
+      });
+      state.controls.addEventListener('change', (...r) => {
         if (state.controlsEngaged) {
           state.controlsDragging = true;
-          state.ignoreOneClick = true;
+
+          !state.clickAfterDrag
+          && !state.ignoreOneClick
+          && (+new Date() - state._cameraMoveStartTime) > DRAG_DURATION_THRESHOLD
+          && (
+            state.camera.position.distanceToSquared(state._cameraPositionBeforeMove) > DRAG_DISTANCE_SQUARE_THRESHOLD
+            || state.camera.rotation.toVector3().distanceToSquared(state._cameraRotationBeforeMove) > DRAG_ROTATION_SQUARE_THRESHOLD
+          )
+          && (state.ignoreOneClick = true);
         }
       });
       state.controls.addEventListener('end', () => {

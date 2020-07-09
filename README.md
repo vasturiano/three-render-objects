@@ -90,6 +90,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>tooltipContent</b>([<i>str</i> or <i>fn</i>]) | Object accessor function or attribute for label (shown in tooltip). Supports plain text or HTML content. ||
 | <b>enablePointerInteraction([<i>boolean</i>]) | Getter/setter for whether to enable the mouse tracking events. This activates an internal tracker of the canvas mouse position and enables the functionality of object hover/click and tooltip labels, at the cost of performance. If you're looking for maximum gain in your render performance it's recommended to switch off this property. | `true` |
 | <b>hoverDuringDrag([<i>boolean</i>]) | Getter/setter for whether to trigger hover events while using the controls via pointer dragging.| `false` |
+| <b>clickAfterDrag([<i>boolean</i>]) | Getter/setter for whether to trigger a click event after dragging using the controls.| `false` |
 
 ###  Utility
 
