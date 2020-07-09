@@ -58,11 +58,6 @@ import TWEEN from '@tweenjs/tween.js';
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
 
-// drag interactions shorter or closer than this will be interpreted as regular clicks
-const DRAG_DURATION_THRESHOLD = 150; // ms
-const DRAG_DISTANCE_SQUARE_THRESHOLD = 25;
-const DRAG_ROTATION_SQUARE_THRESHOLD = 0.001;
-
 export default Kapsule({
   props: {
     width: { default: window.innerWidth, onChange(width, state, prevWidth) { isNaN(width) && (state.width = prevWidth) } },
@@ -104,7 +99,7 @@ export default Kapsule({
         if (state.enablePointerInteraction) {
           // Update tooltip and trigger onHover events
           let topObject = null;
-          if (state.hoverDuringDrag || !state.controlsDragging) {
+          if (state.hoverDuringDrag || !state.isPointerDragging) {
             const raycaster = new three.Raycaster();
             raycaster.params.Line.threshold = state.lineHoverPrecision; // set linePrecision
 
@@ -279,6 +274,11 @@ export default Kapsule({
     state.pointerPos.y = -2;
     ['pointermove', 'pointerdown'].forEach(evType =>
       state.container.addEventListener(evType, ev => {
+        // detect point drag
+        !state.isPointerDragging && ev.type === 'pointermove'
+          && ev.pressure > 0 && (ev.movementX !== 0 || ev.movementY !== 0)
+          && (state.isPointerDragging = true);
+
         if (state.enablePointerInteraction) {
           // update the pointer pos
           const offset = getOffset(state.container),
@@ -306,9 +306,9 @@ export default Kapsule({
 
     // Handle click events on objs
     state.container.addEventListener('pointerup', ev => {
-      if (state.ignoreOneClick) {
-        state.ignoreOneClick = false; // because of controls end event
-        return;
+      if (state.isPointerDragging) {
+        state.isPointerDragging = false;
+        if (!state.clickAfterDrag) return; // don't trigger onClick after pointer drag (camera motion via controls)
       }
 
       if (ev.button === 0) { // left-click
@@ -350,24 +350,10 @@ export default Kapsule({
     if (controlType === 'trackball' || controlType === 'orbit') {
       state.controls.minDistance = 0.1;
       state.controls.maxDistance = state.skyRadius;
-      state.controls.addEventListener('start', () => {
-        state.controlsEngaged = true;
-        state._cameraPositionBeforeMove = state.camera.position.clone();
-        state._cameraRotationBeforeMove = state.camera.rotation.toVector3();
-        state._cameraMoveStartTime = +new Date();
-      });
+      state.controls.addEventListener('start', () => state.controlsEngaged = true);
       state.controls.addEventListener('change', (...r) => {
         if (state.controlsEngaged) {
           state.controlsDragging = true;
-
-          !state.clickAfterDrag
-          && !state.ignoreOneClick
-          && (+new Date() - state._cameraMoveStartTime) > DRAG_DURATION_THRESHOLD
-          && (
-            state.camera.position.distanceToSquared(state._cameraPositionBeforeMove) > DRAG_DISTANCE_SQUARE_THRESHOLD
-            || state.camera.rotation.toVector3().distanceToSquared(state._cameraRotationBeforeMove) > DRAG_ROTATION_SQUARE_THRESHOLD
-          )
-          && (state.ignoreOneClick = true);
         }
       });
       state.controls.addEventListener('end', () => {
