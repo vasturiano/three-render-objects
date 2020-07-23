@@ -79,6 +79,7 @@ export default Kapsule({
     },
     lineHoverPrecision: { default: 1, triggerUpdate: false },
     hoverOrderComparator: { default: () => -1, triggerUpdate: false }, // keep existing order by default
+    hoverFilter: { default: () => true, triggerUpdate: false }, // exclude objects from interaction
     tooltipContent: { triggerUpdate: false },
     hoverDuringDrag: { default: false, triggerUpdate: false },
     clickAfterDrag: { default: false, triggerUpdate: false },
@@ -106,6 +107,7 @@ export default Kapsule({
             raycaster.setFromCamera(state.pointerPos, state.camera);
             const intersects = raycaster.intersectObjects(state.objects, true)
               .map(({ object }) => object)
+              .filter(state.hoverFilter)
               .sort(state.hoverOrderComparator);
 
             topObject = intersects.length ? intersects[0] : null;
