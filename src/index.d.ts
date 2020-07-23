@@ -55,6 +55,8 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   onHover(callback: (obj: object | null, previousObj: object | null) => void): ChainableInstance;
   hoverOrderComparator(): Obj3DCompFn;
   hoverOrderComparator(compFn: Obj3DCompFn): ChainableInstance;
+  hoverFilter(): (obj: Object3D) => boolean;
+  hoverFilter(filterFn: (obj: Object3D) => boolean): ChainableInstance;
   lineHoverPrecision(): number;
   lineHoverPrecision(precision: number): ChainableInstance;
   tooltipContent(): Obj3DAccessor<string>;
