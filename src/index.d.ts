@@ -1,4 +1,4 @@
-import { Object3D, WebGLRendererParameters, Scene, Camera, WebGLRenderer } from 'three';
+import { Object3D, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Intersection } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 
 export interface ConfigOptions {
@@ -71,6 +71,7 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   // Utility
   getBbox(objFilter?: (obj: Object3D) => boolean): { x: [number, number], y: [number, number], z: [number, number] };
   getcreenCoords(x: number, y: number, z: number): { x: number, y: number; };
+  intersectingObjects(x: number, y: number): Intersection[];
 }
 
 export type ThreeRenderObjectsInstance = ThreeRenderObjectsGenericInstance<ThreeRenderObjectsInstance>;

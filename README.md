@@ -99,6 +99,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | --- | --- |
 | <b>getBbox</b>([<i>objFilterFn</i>]) | Returns the current bounding box of the objects in the scene, formatted as `{ x: [<num>, <num>], y: [<num>, <num>], z: [<num>, <num>] }`. If no objects are found, returns `null`. Accepts an optional argument to define a custom object filter: `object => <boolean>`, which should return a truthy value if the object is to be included. This can be useful to calculate the bounding box of a portion of the scene.  |
 | <b>getScreenCoords</b>(<i>x</i>, <i>y</i>, <i>z</i>) | Utility method to translate 3D coordinates to the viewport domain. Given a set of `x`,`y`,`z` coordinates, returns the current equivalent `{x, y}` in viewport coordinates. |
+| <b>intersectingObjects</b>(<i>x</i>, <i>y</i>) | Utility method to retrieve the list of objects under the line of sight of the given viewport coordinates. Returns an array of [intersectObject](https://threejs.org/docs/#api/en/core/Raycaster.intersectObject), sorted by distance (from closest to farthest). |
 
 [npm-img]: https://img.shields.io/npm/v/three-render-objects.svg
 [npm-url]: https://npmjs.org/package/three-render-objects

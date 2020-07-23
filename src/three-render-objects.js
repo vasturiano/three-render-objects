@@ -101,11 +101,7 @@ export default Kapsule({
           // Update tooltip and trigger onHover events
           let topObject = null;
           if (state.hoverDuringDrag || !state.isPointerDragging) {
-            const raycaster = new three.Raycaster();
-            raycaster.params.Line.threshold = state.lineHoverPrecision; // set linePrecision
-
-            raycaster.setFromCamera(state.pointerPos, state.camera);
-            const intersects = raycaster.intersectObjects(state.objects, true)
+            const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y)
               .map(({ object }) => object)
               .filter(state.hoverFilter)
               .sort(state.hoverOrderComparator);
@@ -232,6 +228,13 @@ export default Kapsule({
         x: (vec.x + 1) * state.width / 2,
         y: -(vec.y - 1) * state.height / 2,
       };
+    },
+    intersectingObjects: function(state, x, y) {
+      const raycaster = new three.Raycaster();
+      raycaster.params.Line.threshold = state.lineHoverPrecision; // set linePrecision
+
+      raycaster.setFromCamera(new three.Vector2(x, y), state.camera);
+      return raycaster.intersectObjects(state.objects, true)
     },
     renderer: state => state.renderer,
     scene: state => state.scene,
