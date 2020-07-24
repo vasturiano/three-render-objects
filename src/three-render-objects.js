@@ -121,6 +121,10 @@ export default Kapsule({
 
       return this;
     },
+    getPointerPos: function(state) {
+      const { x, y } = state.pointerPos;
+      return { x, y };
+    },
     cameraPosition: function(state, position, lookAt, transitionDuration) {
       const camera = state.camera;
 

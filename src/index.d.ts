@@ -67,6 +67,7 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   hoverDuringDrag(enabled: boolean): ChainableInstance;
   clickAfterDrag(): boolean;
   clickAfterDrag(enabled: boolean): ChainableInstance;
+  getPointerPos(): { x: number, y: number };
 
   // Utility
   getBbox(objFilter?: (obj: Object3D) => boolean): { x: [number, number], y: [number, number], z: [number, number] };
