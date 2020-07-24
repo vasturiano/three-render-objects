@@ -230,11 +230,15 @@ export default Kapsule({
       };
     },
     intersectingObjects: function(state, x, y) {
+      const relCoords = new three.Vector2(
+        (x / state.width) * 2 - 1,
+        -(y / state.height) * 2 + 1
+      );
+
       const raycaster = new three.Raycaster();
       raycaster.params.Line.threshold = state.lineHoverPrecision; // set linePrecision
-
-      raycaster.setFromCamera(new three.Vector2(x, y), state.camera);
-      return raycaster.intersectObjects(state.objects, true)
+      raycaster.setFromCamera(relCoords, state.camera);
+      return raycaster.intersectObjects(state.objects, true);
     },
     renderer: state => state.renderer,
     scene: state => state.scene,
@@ -286,18 +290,14 @@ export default Kapsule({
 
         if (state.enablePointerInteraction) {
           // update the pointer pos
-          const offset = getOffset(state.container),
-            relPos = {
-              x: ev.pageX - offset.left,
-              y: ev.pageY - offset.top
-            };
-          state.pointerPos.x = (relPos.x / state.width) * 2 - 1;
-          state.pointerPos.y = -(relPos.y / state.height) * 2 + 1;
+          const offset = getOffset(state.container);
+          state.pointerPos.x = ev.pageX - offset.left;
+          state.pointerPos.y = ev.pageY - offset.top;
 
           // Move tooltip
-          state.toolTipElem.style.top = `${relPos.y}px`;
-          state.toolTipElem.style.left = `${relPos.x}px`;
-          state.toolTipElem.style.transform = `translate(-${relPos.x / state.width * 100}%, 21px)`; // adjust horizontal position to not exceed canvas boundaries
+          state.toolTipElem.style.top = `${state.pointerPos.y}px`;
+          state.toolTipElem.style.left = `${state.pointerPos.x}px`;
+          state.toolTipElem.style.transform = `translate(-${state.pointerPos.x / state.width * 100}%, 21px)`; // adjust horizontal position to not exceed canvas boundaries
         }
 
         function getOffset(el) {
