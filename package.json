@@ -1,6 +1,6 @@
 {
   "name": "three-render-objects",
-  "version": "1.23.0",
+  "version": "1.24.0",
   "description": "Easy way to render ThreeJS objects with built-in interaction defaults",
   "license": "MIT",
   "unpkg": "dist/three-render-objects.min.js",
