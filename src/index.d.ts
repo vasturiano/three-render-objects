@@ -50,8 +50,8 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   controls(): object;
 
   // Interaction
-  onClick(callback: (obj: object | null, event: MouseEvent) => void): ChainableInstance;
-  onRightClick(callback: (obj: object | null, event: MouseEvent) => void): ChainableInstance;
+  onClick(callback: (obj: object | null, event: MouseEvent, intersectionPoint: { x: number, y: number, z: number }) => void): ChainableInstance;
+  onRightClick(callback: (obj: object | null, event: MouseEvent, intersectionPoint: { x: number, y: number, z: number }) => void): ChainableInstance;
   onHover(callback: (obj: object | null, previousObj: object | null) => void): ChainableInstance;
   hoverOrderComparator(): Obj3DCompFn;
   hoverOrderComparator(compFn: Obj3DCompFn): ChainableInstance;
