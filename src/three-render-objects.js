@@ -102,11 +102,13 @@ export default Kapsule({
           let topObject = null;
           if (state.hoverDuringDrag || !state.isPointerDragging) {
             const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y)
-              .map(({ object }) => object)
-              .filter(state.hoverFilter)
-              .sort(state.hoverOrderComparator);
+              .filter(d => state.hoverFilter(d.object))
+              .sort((a, b) => state.hoverOrderComparator(a.object, b.object));
 
-            topObject = intersects.length ? intersects[0] : null;
+            const topIntersect = intersects.length ? intersects[0] : null;
+
+            topObject = topIntersect ? topIntersect.object : null;
+            state.intersectionPoint = topIntersect ? topIntersect.point : null;
           }
 
           if (topObject !== state.hoverObj) {
@@ -321,11 +323,11 @@ export default Kapsule({
       }
 
       if (ev.button === 0) { // left-click
-        state.onClick(state.hoverObj || null, ev); // trigger background clicks with null
+        state.onClick(state.hoverObj || null, ev, state.intersectionPoint); // trigger background clicks with null
       }
 
       if (ev.button === 2 && state.onRightClick) { // right-click
-        state.onRightClick(state.hoverObj || null, ev);
+        state.onRightClick(state.hoverObj || null, ev, state.intersectionPoint);
       }
     }, true); // use capture phase to prevent propagation blocking from controls (specifically for fly)
 
