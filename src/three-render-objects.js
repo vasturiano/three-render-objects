@@ -323,11 +323,15 @@ export default Kapsule({
       }
 
       if (ev.button === 0) { // left-click
-        state.onClick(state.hoverObj || null, ev, state.intersectionPoint); // trigger background clicks with null
+        setTimeout(() => // asynchronously to allow hoverObj to be set (on frame)
+          state.onClick(state.hoverObj || null, ev, state.intersectionPoint) // trigger background clicks with null
+        );
       }
 
       if (ev.button === 2 && state.onRightClick) { // right-click
-        state.onRightClick(state.hoverObj || null, ev, state.intersectionPoint);
+        setTimeout(() => // asynchronously to allow hoverObj to be set (on frame)
+          state.onRightClick(state.hoverObj || null, ev, state.intersectionPoint)
+        );
       }
     }, true); // use capture phase to prevent propagation blocking from controls (specifically for fly)
 
