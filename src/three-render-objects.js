@@ -339,7 +339,7 @@ export default Kapsule({
 
     // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer(Object.assign({ antialias: true, alpha: true }, rendererConfig));
-    state.renderer.setPixelRatio(window.devicePixelRatio);
+    state.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio)); // clamp device pixel ratio
 
     state.container.appendChild(state.renderer.domElement);
 
