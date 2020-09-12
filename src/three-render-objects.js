@@ -312,7 +312,7 @@ export default Kapsule({
             scrollTop = window.pageYOffset || document.documentElement.scrollTop;
           return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
         }
-      }, false)
+      }, { passive: true })
     );
 
     // Handle click events on objs
@@ -331,11 +331,11 @@ export default Kapsule({
           state.onRightClick(state.hoverObj || null, ev, state.intersectionPoint)
         }
       });
-    }, true); // use capture phase to prevent propagation blocking from controls (specifically for fly)
+    }, { passive: true, capture: true }); // use capture phase to prevent propagation blocking from controls (specifically for fly)
 
     state.container.addEventListener('contextmenu', ev => {
       if (state.onRightClick) ev.preventDefault(); // prevent default contextmenu behavior and allow pointerup to fire instead
-    }, false);
+    });
 
     // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer(Object.assign({ antialias: true, alpha: true }, rendererConfig));
