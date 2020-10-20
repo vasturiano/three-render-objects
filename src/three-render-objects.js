@@ -266,6 +266,7 @@ export default Kapsule({
 
     // Add relative container
     domNode.appendChild(state.container = document.createElement('div'));
+    state.container.className = 'scene-container';
     state.container.style.position = 'relative';
 
     // Add nav info section

@@ -17,3 +17,7 @@
   font-family: sans-serif;
   pointer-events: none;
 }
+
+.scene-container canvas:focus {
+  outline: none;
+}
