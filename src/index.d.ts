@@ -1,9 +1,10 @@
-import { Object3D, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Intersection } from 'three';
+import { Object3D, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Renderer, Intersection } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 
 export interface ConfigOptions {
   controlType?: 'trackball' | 'orbit' | 'fly';
   rendererConfig?: WebGLRendererParameters;
+  extraRenderers?: Renderer[];
   waitForLoadComplete?: boolean;
 }
 

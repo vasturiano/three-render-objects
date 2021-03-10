@@ -97,6 +97,8 @@ export default Kapsule({
           ? state.postProcessingComposer.render() // if using postprocessing, switch the output to it
           : state.renderer.render(state.scene, state.camera);
 
+        state.extraRenderers.forEach(r => r.render(state.scene, state.camera));
+
         if (state.enablePointerInteraction) {
           // Update tooltip and trigger onHover events
           let topObject = null;
@@ -260,7 +262,12 @@ export default Kapsule({
     clock: new three.Clock()
   }),
 
-  init(domNode, state, { controlType = 'trackball', rendererConfig = {}, waitForLoadComplete = true }) {
+  init(domNode, state, {
+    controlType = 'trackball',
+    rendererConfig = {},
+    extraRenderers = [],
+    waitForLoadComplete = true
+  } = {}) {
     // Wipe DOM
     domNode.innerHTML = '';
 
@@ -341,8 +348,17 @@ export default Kapsule({
     // Setup renderer, camera and controls
     state.renderer = new three.WebGLRenderer(Object.assign({ antialias: true, alpha: true }, rendererConfig));
     state.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio)); // clamp device pixel ratio
-
     state.container.appendChild(state.renderer.domElement);
+
+    // Setup extra renderers
+    state.extraRenderers = extraRenderers;
+    state.extraRenderers.forEach(r => {
+      // overlay them on top of main renderer
+      r.domElement.style.position = 'absolute';
+      r.domElement.style.top = '0px';
+      r.domElement.style.pointerEvents = 'none';
+      state.container.appendChild(r.domElement);
+    });
 
     // configure post-processing composer
     state.postProcessingComposer = new ThreeEffectComposer(state.renderer);
@@ -376,8 +392,8 @@ export default Kapsule({
       });
     }
 
-    state.renderer.setSize(state.width, state.height);
-    state.postProcessingComposer.setSize(state.width, state.height);
+    [state.renderer, state.postProcessingComposer, ...state.extraRenderers]
+      .forEach(r => r.setSize(state.width, state.height));
     state.camera.aspect = state.width/state.height;
     state.camera.updateProjectionMatrix();
 
@@ -396,8 +412,8 @@ export default Kapsule({
     if (state.width && state.height && (changedProps.hasOwnProperty('width') || changedProps.hasOwnProperty('height'))) {
       state.container.style.width = state.width;
       state.container.style.height = state.height;
-      state.renderer.setSize(state.width, state.height);
-      state.postProcessingComposer.setSize(state.width, state.height);
+      [state.renderer, state.postProcessingComposer, ...state.extraRenderers]
+        .forEach(r => r.setSize(state.width, state.height));
       state.camera.aspect = state.width/state.height;
       state.camera.updateProjectionMatrix();
     }
