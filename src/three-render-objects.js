@@ -237,6 +237,16 @@ export default Kapsule({
         y: -(vec.y - 1) * state.height / 2,
       };
     },
+    getSceneCoords: function(state, screenX, screenY, distance = 0) {
+      const relCoords = new three.Vector2(
+        (screenX / state.width) * 2 - 1,
+        -(screenY / state.height) * 2 + 1
+      );
+
+      const raycaster = new three.Raycaster();
+      raycaster.setFromCamera(relCoords, state.camera);
+      return Object.assign({}, raycaster.ray.at(distance, new three.Vector3()));
+    },
     intersectingObjects: function(state, x, y) {
       const relCoords = new three.Vector2(
         (x / state.width) * 2 - 1,

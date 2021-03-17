@@ -72,7 +72,8 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
 
   // Utility
   getBbox(objFilter?: (obj: Object3D) => boolean): { x: [number, number], y: [number, number], z: [number, number] };
-  getcreenCoords(x: number, y: number, z: number): { x: number, y: number; };
+  getScreenCoords(x: number, y: number, z: number): { x: number, y: number; };
+  getSceneCoords(x: number, y: number, distance: number): { x: number, y: number, z: number };
   intersectingObjects(x: number, y: number): Intersection[];
 }
 
