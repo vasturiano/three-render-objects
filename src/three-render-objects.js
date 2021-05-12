@@ -312,7 +312,7 @@ export default Kapsule({
 
         // detect point drag
         !state.isPointerDragging && ev.type === 'pointermove'
-          && (ev.pressure > 0 || state.isPointerPressed)
+          && (ev.pressure > 0 || state.isPointerPressed) // ev.pressure always 0 on Safari, so we used the isPointerPressed tracker
           && [ev.movementX, ev.movementY].some(m => Math.abs(m) >= (ev.pointerType === 'touch' ? 1 : 0)) // relax drag trigger sensitivity on touch events
           && (state.isPointerDragging = true);
 
