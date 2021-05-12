@@ -307,9 +307,13 @@ export default Kapsule({
     state.pointerPos.y = -2;
     ['pointermove', 'pointerdown'].forEach(evType =>
       state.container.addEventListener(evType, ev => {
+        // track click state
+        evType === 'pointerdown' && (state.isPointerPressed = true);
+
         // detect point drag
         !state.isPointerDragging && ev.type === 'pointermove'
-          && ev.pressure > 0 && [ev.movementX, ev.movementY].some(m => Math.abs(m) > (ev.pointerType === 'touch' ? 1 : 0)) // relax drag trigger sensitivity on touch events
+          && (ev.pressure > 0 || state.isPointerPressed)
+          && [ev.movementX, ev.movementY].some(m => Math.abs(m) >= (ev.pointerType === 'touch' ? 1 : 0)) // relax drag trigger sensitivity on touch events
           && (state.isPointerDragging = true);
 
         if (state.enablePointerInteraction) {
@@ -335,6 +339,7 @@ export default Kapsule({
 
     // Handle click events on objs
     state.container.addEventListener('pointerup', ev => {
+      state.isPointerPressed = false;
       if (state.isPointerDragging) {
         state.isPointerDragging = false;
         if (!state.clickAfterDrag) return; // don't trigger onClick after pointer drag (camera motion via controls)
@@ -390,8 +395,11 @@ export default Kapsule({
     if (controlType === 'trackball' || controlType === 'orbit') {
       state.controls.minDistance = 0.1;
       state.controls.maxDistance = state.skyRadius;
-      state.controls.addEventListener('start', () => state.controlsEngaged = true);
-      state.controls.addEventListener('change', (...r) => {
+      state.controls.addEventListener('start', () => {
+        state.isPointerPressed = true; // trackball controls blocks pointerdown events, so we have to track it (also) here
+        state.controlsEngaged = true;
+      });
+      state.controls.addEventListener('change', () => {
         if (state.controlsEngaged) {
           state.controlsDragging = true;
         }
