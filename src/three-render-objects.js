@@ -396,7 +396,6 @@ export default Kapsule({
       state.controls.minDistance = 0.1;
       state.controls.maxDistance = state.skyRadius;
       state.controls.addEventListener('start', () => {
-        state.isPointerPressed = true; // trackball controls blocks pointerdown events, so we have to track it (also) here
         state.controlsEngaged = true;
       });
       state.controls.addEventListener('change', () => {
