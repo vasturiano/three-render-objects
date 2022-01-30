@@ -174,7 +174,12 @@ export default Kapsule({
       }
 
       function setLookAt(lookAt) {
-        state.controls.target = new three.Vector3(lookAt.x, lookAt.y, lookAt.z);
+        const lookAtVect = new three.Vector3(lookAt.x, lookAt.y, lookAt.z);
+        if (state.controls.target) {
+          state.controls.target = lookAtVect;
+        } else { // Fly controls doesn't have target attribute
+          camera.lookAt(lookAtVect); // note: lookAt may be overridden by other controls in some cases
+        }
       }
 
       function getLookAt() {
