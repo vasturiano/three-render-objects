@@ -432,8 +432,8 @@ export default Kapsule({
   update(state, changedProps) {
     // resize canvas
     if (state.width && state.height && (changedProps.hasOwnProperty('width') || changedProps.hasOwnProperty('height'))) {
-      state.container.style.width = state.width;
-      state.container.style.height = state.height;
+      state.container.style.width = `${state.width}px`;
+      state.container.style.height = `${state.height}px`;
       [state.renderer, state.postProcessingComposer, ...state.extraRenderers]
         .forEach(r => r.setSize(state.width, state.height));
       state.camera.aspect = state.width/state.height;
