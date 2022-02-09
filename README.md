@@ -3,7 +3,7 @@ three-render-objects
 
 [![NPM package][npm-img]][npm-url]
 [![Build Size][build-size-img]][build-size-url]
-[![Dependencies][dependencies-img]][dependencies-url]
+[![NPM Downloads][npm-downloads-img]][npm-downloads-url]
 
 This module offers a convenient way to render [ThreeJS](https://threejs.org/) objects onto a WebGL canvas, with built-in interaction capabilities:
 * hover/click events
@@ -15,28 +15,28 @@ All the renderer/scene/camera scaffolding is already included and any instance o
 
 ## Quick start
 
-```
+```js
 import ThreeRenderObjects from 'three-render-objects';
 ```
 or
-```
-var ThreeRenderObjects = require('three-render-objects');
+```js
+const ThreeRenderObjects = require('three-render-objects');
 ```
 or even
-```
+```html
 <script src="//unpkg.com/three-render-objects"></script>
 ```
 then
-```
+```js
 const myCanvas = ThreeRenderObjects();
 myCanvas(<myDOMElement>)
-    .objects(<myData>);
+  .objects(<myData>);
 ```
 
 ## API reference
 
 ### Initialisation
-```
+```js
 ThreeRenderObjects({ configOptions })(<domElement>)
 ```
 
@@ -104,9 +104,9 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | <b>getSceneCoords</b>(<i>x</i>, <i>y</i>, <i>distance</i>) | Utility method to translate viewport distance coordinates to the scene 3D domain. Given a set of `x`,`y` viewport coordinates and distance from the camera, returns the current equivalent `{x, y, z}` in 3D scene coordinates. If no distance is provided, defaults to `0`. |
 | <b>intersectingObjects</b>(<i>x</i>, <i>y</i>) | Utility method to retrieve the list of objects under the line of sight of the given viewport coordinates. Returns an array of [intersectObject](https://threejs.org/docs/#api/en/core/Raycaster.intersectObject), sorted by distance (from closest to farthest). |
 
-[npm-img]: https://img.shields.io/npm/v/three-render-objects.svg
+[npm-img]: https://img.shields.io/npm/v/three-render-objects
 [npm-url]: https://npmjs.org/package/three-render-objects
-[build-size-img]: https://img.shields.io/bundlephobia/minzip/three-render-objects.svg
+[build-size-img]: https://img.shields.io/bundlephobia/minzip/three-render-objects
 [build-size-url]: https://bundlephobia.com/result?p=three-render-objects
-[dependencies-img]: https://img.shields.io/david/vasturiano/three-render-objects.svg
-[dependencies-url]: https://david-dm.org/vasturiano/three-render-objects
+[npm-downloads-img]: https://img.shields.io/npm/dt/three-render-objects
+[npm-downloads-url]: https://www.npmtrends.com/three-render-objects
