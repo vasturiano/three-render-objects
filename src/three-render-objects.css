@@ -8,6 +8,7 @@
 }
 
 .scene-tooltip {
+  top: 0;
   color: lavender;
   font-size: 15px;
 }
