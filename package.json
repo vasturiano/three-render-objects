@@ -7,7 +7,9 @@
   "main": "dist/three-render-objects.common.js",
   "module": "dist/three-render-objects.module.js",
   "types": "dist/three-render-objects.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "./src/*.css"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vasturiano/three-render-objects.git"
