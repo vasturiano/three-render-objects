@@ -56,10 +56,5 @@
       ObjRender.tick(); // render it
       requestAnimationFrame(animate);
     })(); // IIFE
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      ObjRender.controls().handleResize();
-    });
-    resizeObserver.observe(document.querySelector("#myscene"));
   </script>
 </body>

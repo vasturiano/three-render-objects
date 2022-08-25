@@ -52,12 +52,16 @@ class FirstPersonControls {
     this.viewHalfX = 0;
     this.viewHalfY = 0;
 
+    // resizing
+
+    const resizeObserver = new ResizeObserver(() => {
+      this.handleResize();
+    });
+
     // private variables
 
     let lat = 0;
     let lon = 0;
-
-    //
 
     this.handleResize = function () {
       if (this.domElement === document) {
@@ -114,7 +118,7 @@ class FirstPersonControls {
     };
 
     this.onKeyDown = function (event) {
-        console.log("DEBUG keydown", event)
+      console.log("DEBUG keydown", event);
 
       switch (event.code) {
         case "ArrowUp":
@@ -269,6 +273,8 @@ class FirstPersonControls {
 
       window.removeEventListener("keydown", _onKeyDown);
       window.removeEventListener("keyup", _onKeyUp);
+
+      resizeObserver.disconnect();
     };
 
     const _onMouseMove = this.onMouseMove.bind(this);
@@ -296,6 +302,8 @@ class FirstPersonControls {
     }
 
     this.handleResize();
+
+    resizeObserver.observe(domElement);
 
     setOrientation(this);
   }
