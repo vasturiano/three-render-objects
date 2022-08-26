@@ -291,14 +291,20 @@ export default Kapsule({
     state.container.className = 'scene-container';
     state.container.style.position = 'relative';
 
+    // Get controller type
+    const controlTypeIsString = typeof controlType === typeof 'string';
+    const controlTypeIsFunction = typeof controlType === typeof (() => {});
+
     // Add nav info section
     state.container.appendChild(state.navInfo = document.createElement('div'));
     state.navInfo.className = 'scene-nav-info';
-    state.navInfo.textContent = {
-        orbit: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
-        trackball: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
-        fly: 'WASD: move, R|F: up | down, Q|E: roll, up|down: pitch, left|right: yaw'
-      }[controlType] || '';
+    if (controlTypeIsString) {
+      state.navInfo.textContent = {
+          orbit: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
+          trackball: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
+          fly: 'WASD: move, R|F: up | down, Q|E: roll, up|down: pitch, left|right: yaw'
+        }[controlType] || '';
+    }
     state.navInfo.style.display = state.showNavInfo ? null : 'none';
 
     // Setup tooltip
@@ -388,34 +394,43 @@ export default Kapsule({
     state.postProcessingComposer = new ThreeEffectComposer(state.renderer);
     state.postProcessingComposer.addPass(new ThreeRenderPass(state.scene, state.camera)); // render scene as first pass
 
-    // configure controls
-    state.controls = new ({
-      trackball: ThreeTrackballControls,
-      orbit: ThreeOrbitControls,
-      fly: ThreeFlyControls
-    }[controlType])(state.camera, state.renderer.domElement);
-
-    if (controlType === 'fly') {
-      state.controls.movementSpeed = 300;
-      state.controls.rollSpeed = Math.PI / 6;
-      state.controls.dragToLook = true;
+    // create controls
+    if (controlTypeIsString) {
+      state.controls = new ({
+        trackball: ThreeTrackballControls,
+        orbit: ThreeOrbitControls,
+        fly: ThreeFlyControls
+      }[controlType])(state.camera, state.renderer.domElement);
+    } else if (controlTypeIsFunction) {
+      state.controls = controlType(state.camera, state.renderer.domElement);
+    } else {
+      throw "Invalid controlType argument";
     }
 
-    if (controlType === 'trackball' || controlType === 'orbit') {
-      state.controls.minDistance = 0.1;
-      state.controls.maxDistance = state.skyRadius;
-      state.controls.addEventListener('start', () => {
-        state.controlsEngaged = true;
-      });
-      state.controls.addEventListener('change', () => {
-        if (state.controlsEngaged) {
-          state.controlsDragging = true;
-        }
-      });
-      state.controls.addEventListener('end', () => {
-        state.controlsEngaged = false;
-        state.controlsDragging = false;
-      });
+    // configure controls
+    if (controlTypeIsString) {
+      if (controlType === 'fly') {
+        state.controls.movementSpeed = 300;
+        state.controls.rollSpeed = Math.PI / 6;
+        state.controls.dragToLook = true;
+      }
+
+      if (controlType === 'trackball' || controlType === 'orbit') {
+        state.controls.minDistance = 0.1;
+        state.controls.maxDistance = state.skyRadius;
+        state.controls.addEventListener('start', () => {
+          state.controlsEngaged = true;
+        });
+        state.controls.addEventListener('change', () => {
+          if (state.controlsEngaged) {
+            state.controlsDragging = true;
+          }
+        });
+        state.controls.addEventListener('end', () => {
+          state.controlsEngaged = false;
+          state.controlsDragging = false;
+        });
+      }
     }
 
     [state.renderer, state.postProcessingComposer, ...state.extraRenderers]
