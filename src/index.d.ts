@@ -1,4 +1,8 @@
 import { Object3D, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Renderer, Intersection } from 'three';
+import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
+import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
+
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 
 export interface ConfigOptions {
@@ -48,7 +52,7 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   renderer(): WebGLRenderer;
   scene(): Scene;
   camera(): Camera;
-  controls(): object;
+  controls(): ThreeTrackballControls | ThreeOrbitControls | ThreeFlyControls;
 
   // Interaction
   onClick(callback: (obj: object | null, event: MouseEvent, intersectionPoint: { x: number, y: number, z: number }) => void): ChainableInstance;
