@@ -18,11 +18,7 @@ All the renderer/scene/camera scaffolding is already included and any instance o
 ```js
 import ThreeRenderObjects from 'three-render-objects';
 ```
-or
-```js
-const ThreeRenderObjects = require('three-render-objects');
-```
-or even
+or using a *script* tag
 ```html
 <script src="//unpkg.com/three-render-objects"></script>
 ```
