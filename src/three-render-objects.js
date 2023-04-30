@@ -3,6 +3,7 @@ import {
   Scene,
   PerspectiveCamera,
   Raycaster,
+  SRGBColorSpace,
   TextureLoader,
   Vector2,
   Vector3,
@@ -28,6 +29,7 @@ const three = window.THREE
   Scene,
   PerspectiveCamera,
   Raycaster,
+  SRGBColorSpace,
   TextureLoader,
   Vector2,
   Vector3,
@@ -466,6 +468,7 @@ export default Kapsule({
         !state.loadComplete && finishLoad();
       } else {
         new three.TextureLoader().load(state.backgroundImageUrl, texture => {
+          texture.colorSpace = three.SRGBColorSpace;
           state.skysphere.material = new three.MeshBasicMaterial({ map: texture, side: three.BackSide });
           state.skysphere.visible = true;
 
