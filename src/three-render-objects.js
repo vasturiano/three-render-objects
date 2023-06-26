@@ -55,7 +55,7 @@ import { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postpr
 import { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 
 import { parseToRgb, opacify } from 'polished';
-import TWEEN from '@tweenjs/tween.js';
+import * as TWEEN from '@tweenjs/tween.js';
 
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
