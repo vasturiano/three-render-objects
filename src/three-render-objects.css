@@ -17,6 +17,7 @@
   position: absolute;
   font-family: sans-serif;
   pointer-events: none;
+  user-select: none;
 }
 
 .scene-container canvas:focus {
