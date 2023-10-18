@@ -70,6 +70,7 @@ export default Kapsule({
     showNavInfo: { default: true },
     skyRadius: { default: 50000 },
     objects: { default: [] },
+    lights: { default: [] },
     enablePointerInteraction: {
       default: true,
       onChange(_, state) {
@@ -481,6 +482,11 @@ export default Kapsule({
     }
 
     changedProps.hasOwnProperty('showNavInfo') && (state.navInfo.style.display = state.showNavInfo ? null : 'none');
+
+    if (changedProps.hasOwnProperty('lights')) {
+      (changedProps.lights || []).forEach(light => state.scene.remove(light)); // Clear the place
+      state.lights.forEach(light => state.scene.add(light)); // Add to scene
+    }
 
     if (changedProps.hasOwnProperty('objects')) {
       (changedProps.objects || []).forEach(obj => state.scene.remove(obj)); // Clear the place

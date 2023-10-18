@@ -48,6 +48,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | Method | Description | Default |
 | --- | --- | :--: |
 | <b>objects</b>([<i>array</i>]) | Getter/setter for the list of objects to render. Each object should be an instance of [Object3D](https://threejs.org/docs/#api/core/Object3D). | `[]` |
+| <b>lights</b>([<i>array</i>]) | Getter/setter for the list of lights to use in the scene. Each item should be an instance of [Light](https://threejs.org/docs/#api/en/lights/Light). | `[]` |
 
 ### Container layout
 

@@ -1,4 +1,4 @@
-import { Object3D, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Renderer, Intersection } from 'three';
+import { Object3D, Light, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Renderer, Intersection } from 'three';
 import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
@@ -26,6 +26,8 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   // Data input
   objects(): Object3D[];
   objects(objs: Object3D[]): ChainableInstance;
+  lights(): Light[];
+  lights(lights: Light[]): ChainableInstance;
 
   // Container layout
   width(): number;
