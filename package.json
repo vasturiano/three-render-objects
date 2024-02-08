@@ -45,7 +45,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "@tweenjs/tween.js": "18 - 21",
+    "@tweenjs/tween.js": "18 - 23",
     "accessor-fn": "1",
     "kapsule": "1",
     "polished": "4"
@@ -54,19 +54,19 @@
     "three": "*"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "postcss": "^8.4.31",
+    "postcss": "^8.4.35",
     "rimraf": "^5.0.5",
-    "rollup": "^4.1.4",
+    "rollup": "^4.9.6",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-postcss": "^4.0.2",
-    "three": "^0.157.0",
-    "typescript": "^5.2.2"
+    "three": "^0.161.0",
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=12"
