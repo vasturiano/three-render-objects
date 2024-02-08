@@ -1,16 +1,23 @@
 <head>
   <style> body { margin: 0; }</style>
 
-  <script src="//unpkg.com/three"></script>
+  <script type="importmap">{ "imports": {
+    "three": "//unpkg.com/three/build/three.module.js",
+    "three/addons/": "//unpkg.com/three/examples/jsm/"
+  }}</script>
+  <script type="module">
+    import * as THREE from '//unpkg.com/three/build/three.module.js';
+    window.THREE = THREE;
+  </script>
 
-  <script src="//unpkg.com/three-render-objects"></script>
-  <!--<script src="../../dist/three-render-objects.js"></script>-->
+  <script src="//unpkg.com/three-render-objects" defer></script>
+  <!--<script src="../../dist/three-render-objects.js" defer></script>-->
 </head>
 
 <body>
   <div id="myscene"></div>
 
-  <script>
+  <script type="module">
     // Gen random positioned objects
     const N = 300;
     const COORD_RANGE = 300;
