@@ -55,7 +55,7 @@ import { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postpr
 import { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 
 import { parseToRgb, opacify } from 'polished';
-import * as TWEEN from '@tweenjs/tween.js';
+import { Tween, Group as TweenGroup, Easing } from '@tweenjs/tween.js';
 
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
@@ -123,7 +123,7 @@ export default Kapsule({
           }
         }
 
-        TWEEN.update(); // update camera animation tweens
+        state.tweenGroup.update(); // update camera animation tweens
       }
 
       return this;
@@ -147,18 +147,22 @@ export default Kapsule({
           const camPos = Object.assign({}, camera.position);
           const camLookAt = getLookAt();
 
-          new TWEEN.Tween(camPos)
-            .to(finalPos, transitionDuration)
-            .easing(TWEEN.Easing.Quadratic.Out)
-            .onUpdate(setCameraPos)
-            .start();
+          state.tweenGroup.add(
+            new Tween(camPos)
+              .to(finalPos, transitionDuration)
+              .easing(Easing.Quadratic.Out)
+              .onUpdate(setCameraPos)
+              .start()
+          );
 
           // Face direction in 1/3rd of time
-          new TWEEN.Tween(camLookAt)
-            .to(finalLookAt, transitionDuration / 3)
-            .easing(TWEEN.Easing.Quadratic.Out)
-            .onUpdate(setLookAt)
-            .start();
+          state.tweenGroup.add(
+            new Tween(camLookAt)
+              .to(finalLookAt, transitionDuration / 3)
+              .easing(Easing.Quadratic.Out)
+              .onUpdate(setLookAt)
+              .start()
+          );
         }
 
         return this;
@@ -277,7 +281,8 @@ export default Kapsule({
   stateInit: () => ({
     scene: new three.Scene(),
     camera: new three.PerspectiveCamera(),
-    clock: new three.Clock()
+    clock: new three.Clock(),
+    tweenGroup: new TweenGroup()
   }),
 
   init(domNode, state, {
