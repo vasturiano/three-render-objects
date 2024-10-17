@@ -39,6 +39,7 @@ ThreeRenderObjects({ configOptions })(<domElement>)
 | Config options | Description | Default |
 | --- | --- | :--: |
 | <b>controlType</b>: <i>str</i> | Which type of control to use to control the camera. Choice between [trackball](https://threejs.org/examples/misc_controls_trackball.html), [orbit](https://threejs.org/examples/#misc_controls_orbit) or [fly](https://threejs.org/examples/misc_controls_fly.html). | `trackball` |
+| <b>useWebGPU</b>: <i>boolean</i> | Whether to use the `WebGPURenderer` instead of the default `WebGLRenderer`. | `false` |
 | <b>rendererConfig</b>: <i>object</i> | Configuration parameters to pass to the [ThreeJS WebGLRenderer](https://threejs.org/docs/#api/en/renderers/WebGLRenderer) constructor. | `{ antialias: true, alpha: true }` |
 | <b>extraRenderers</b>: <i>array</i> | If you wish to include objects that require a dedicated renderer besides `WebGL`, such as [CSS3DRenderer](https://threejs.org/docs/#examples/en/renderers/CSS3DRenderer), include in this array those extra renderer instances. | `[]` |
 | <b>waitForLoadComplete</b>: <i>boolean</i> | Whether to wait until all the asynchronous loading operations are finished (such as the background image) before rendering the objects in the scene for the first time. | `true` |

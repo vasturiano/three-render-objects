@@ -47,6 +47,8 @@ const three = window.THREE
   Clock
 };
 
+import { WebGPURenderer } from "three/webgpu";
+
 import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
@@ -287,6 +289,7 @@ export default Kapsule({
 
   init(domNode, state, {
     controlType = 'trackball',
+    useWebGPU = false,
     rendererConfig = {},
     extraRenderers = [],
     waitForLoadComplete = true
@@ -378,7 +381,7 @@ export default Kapsule({
     });
 
     // Setup renderer, camera and controls
-    state.renderer = new three.WebGLRenderer(Object.assign({ antialias: true, alpha: true }, rendererConfig));
+    state.renderer = new (useWebGPU ? WebGPURenderer : three.WebGLRenderer)(Object.assign({ antialias: true, alpha: true }, rendererConfig));
     state.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio)); // clamp device pixel ratio
     state.container.appendChild(state.renderer.domElement);
 

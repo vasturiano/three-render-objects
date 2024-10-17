@@ -7,6 +7,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 
 export interface ConfigOptions {
   controlType?: 'trackball' | 'orbit' | 'fly';
+  useWebGPU?: boolean;
   rendererConfig?: WebGLRendererParameters;
   extraRenderers?: Renderer[];
   waitForLoadComplete?: boolean;
