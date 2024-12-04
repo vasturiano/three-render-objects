@@ -27,8 +27,10 @@
       ['x', 'y', 'z'].forEach(dim => obj.position[dim] = Math.random() * COORD_RANGE * 2 - COORD_RANGE);
     });
 
-    const ObjRender = ThreeRenderObjects({ controlType: 'trackball' })
-      (document.getElementById('myscene'))
+    const ObjRender = new ThreeRenderObjects(
+      document.getElementById('myscene'),
+      { controlType: 'trackball' }
+    )
       .objects(objs);
 
     (function animate() {

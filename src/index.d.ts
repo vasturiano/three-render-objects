@@ -20,8 +20,9 @@ type Coords = { x: number; y: number; z: number; };
 
 type Obj3DCompFn = (a: Object3D, b: Object3D) => number;
 
-export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
-  (element: HTMLElement): ChainableInstance;
+export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
+  constructor(element: HTMLElement, configOptions?: ConfigOptions);
+
   resetProps(): ChainableInstance;
 
   // Data input
@@ -84,8 +85,6 @@ export interface ThreeRenderObjectsGenericInstance<ChainableInstance> {
   intersectingObjects(x: number, y: number): Intersection[];
 }
 
-export type ThreeRenderObjectsInstance = ThreeRenderObjectsGenericInstance<ThreeRenderObjectsInstance>;
-
-declare function ThreeRenderObjects(configOptions?: ConfigOptions): ThreeRenderObjectsInstance;
+declare class ThreeRenderObjects extends ThreeRenderObjectsGeneric<ThreeRenderObjects> {}
 
 export default ThreeRenderObjects;

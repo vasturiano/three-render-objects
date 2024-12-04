@@ -24,8 +24,7 @@ or using a *script* tag
 ```
 then
 ```js
-const myCanvas = ThreeRenderObjects();
-myCanvas(<myDOMElement>)
+const myCanvas = new ThreeRenderObjects(<myDOMElement>)
   .objects(<myData>);
 ```
 
@@ -33,7 +32,7 @@ myCanvas(<myDOMElement>)
 
 ### Initialisation
 ```js
-ThreeRenderObjects({ configOptions })(<domElement>)
+new ThreeRenderObjects(<domElement>, { configOptions })
 ```
 
 | Config options | Description | Default |
