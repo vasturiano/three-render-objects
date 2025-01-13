@@ -61,6 +61,7 @@ import { Tween, Group as TweenGroup, Easing } from '@tweenjs/tween.js';
 
 import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
+import Tooltip from 'float-tooltip';
 
 export default Kapsule({
   props: {
@@ -78,10 +79,7 @@ export default Kapsule({
       onChange(_, state) {
         // Reset hover state
         state.hoverObj = null;
-        if (state.toolTipElem) {
-          state.toolTipElem.style.display = 'none';
-          state.toolTipElem.innerHTML = '';
-        }
+        state.tooltip && state.tooltip.content(null);
       },
       triggerUpdate: false
     },
@@ -123,9 +121,7 @@ export default Kapsule({
 
           if (topObject !== state.hoverObj) {
             state.onHover(topObject, state.hoverObj);
-            state.toolTipElem.style.display = (state.toolTipElem.innerHTML = topObject ? accessorFn(state.tooltipContent)(topObject) || '' : '')
-              ? 'initial'
-              : 'none';
+            state.tooltip.content(topObject ? accessorFn(state.tooltipContent)(topObject) || null : null);
             state.hoverObj = topObject;
           }
         }
@@ -318,9 +314,7 @@ export default Kapsule({
     state.navInfo.style.display = state.showNavInfo ? null : 'none';
 
     // Setup tooltip
-    state.toolTipElem = document.createElement('div');
-    state.toolTipElem.classList.add('scene-tooltip');
-    state.container.appendChild(state.toolTipElem);
+    state.tooltip = new Tooltip(state.container);
 
     // Capture pointer coords on move or touchstart
     state.pointerPos = new three.Vector2();
@@ -342,15 +336,6 @@ export default Kapsule({
           const offset = getOffset(state.container);
           state.pointerPos.x = ev.pageX - offset.left;
           state.pointerPos.y = ev.pageY - offset.top;
-
-          // Move tooltip
-          state.toolTipElem.style.top = `${state.pointerPos.y}px`;
-          state.toolTipElem.style.left = `${state.pointerPos.x}px`;
-          // adjust horizontal position to not exceed canvas boundaries
-          state.toolTipElem.style.transform = `translate(-${state.pointerPos.x / state.width * 100}%, ${
-            // flip to above if near bottom
-            state.height - state.pointerPos.y < 100 ? 'calc(-100% - 8px)' : '21px'
-          })`;
         }
 
         function getOffset(el) {
