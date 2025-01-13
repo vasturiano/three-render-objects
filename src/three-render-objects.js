@@ -78,7 +78,10 @@ export default Kapsule({
       onChange(_, state) {
         // Reset hover state
         state.hoverObj = null;
-        if (state.toolTipElem) state.toolTipElem.innerHTML = '';
+        if (state.toolTipElem) {
+          state.toolTipElem.style.display = 'none';
+          state.toolTipElem.innerHTML = '';
+        }
       },
       triggerUpdate: false
     },
@@ -120,7 +123,9 @@ export default Kapsule({
 
           if (topObject !== state.hoverObj) {
             state.onHover(topObject, state.hoverObj);
-            state.toolTipElem.innerHTML = topObject ? accessorFn(state.tooltipContent)(topObject) || '' : '';
+            state.toolTipElem.style.display = (state.toolTipElem.innerHTML = topObject ? accessorFn(state.tooltipContent)(topObject) || '' : '')
+              ? 'initial'
+              : 'none';
             state.hoverObj = topObject;
           }
         }
