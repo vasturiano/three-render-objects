@@ -2,8 +2,8 @@ import { Object3D, Light, WebGLRendererParameters, Scene, Camera, WebGLRenderer,
 import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
-
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { ReactHTMLElement } from 'react';
 
 export interface ConfigOptions {
   controlType?: 'trackball' | 'orbit' | 'fly';
@@ -68,8 +68,8 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
   hoverFilter(filterFn: (obj: Object3D) => boolean): ChainableInstance;
   lineHoverPrecision(): number;
   lineHoverPrecision(precision: number): ChainableInstance;
-  tooltipContent(): Obj3DAccessor<string | HTMLElement>;
-  tooltipContent(contentAccessor: Obj3DAccessor<string | HTMLElement>): ChainableInstance;
+  tooltipContent(): Obj3DAccessor<string | HTMLElement | ReactHTMLElement<HTMLElement> | boolean>;
+  tooltipContent(contentAccessor: Obj3DAccessor<string | HTMLElement | ReactHTMLElement<HTMLElement> | boolean>): ChainableInstance;
   enablePointerInteraction(): boolean;
   enablePointerInteraction(enable: boolean): ChainableInstance;
   hoverDuringDrag(): boolean;
