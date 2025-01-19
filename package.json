@@ -47,7 +47,7 @@
   "dependencies": {
     "@tweenjs/tween.js": "18 - 25",
     "accessor-fn": "1",
-    "float-tooltip": "^1.6",
+    "float-tooltip": "^1.7",
     "kapsule": "^1.16",
     "polished": "4"
   },

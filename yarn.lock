@@ -1371,14 +1371,14 @@ eventemitter3@^4.0.4:
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
 
 fdir@^6.2.0:
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/fdir/-/fdir-6.4.2.tgz#ddaa7ce1831b161bc3657bb99cb36e1622702689"
-  integrity sha512-KnhMXsKSPZlAhp7+IjUkRZKPb4fUyccpDrdFXbi4QL1qkmFh9kVY09Yox+n4MaOb3lHZ1Tv829C3oaaXoMYPDQ==
+  version "6.4.3"
+  resolved "https://registry.yarnpkg.com/fdir/-/fdir-6.4.3.tgz#011cdacf837eca9b811c89dbb902df714273db72"
+  integrity sha512-PMXmW2y1hDDfTSRc9gaXIuCCRpuoz3Kaz8cUelp3smouvfT632ozg2vrT6lJsHKKOF59YLbOGfAWGUcKEfRMQw==
 
-float-tooltip@^1.6:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/float-tooltip/-/float-tooltip-1.6.0.tgz#13fd4481a30876bddf17a8516248ba43d0b5f0d0"
-  integrity sha512-QG5zVg09GQpHLDzJia1PMA6FFjnVnXfojFpyMgCOFJtbhJncZFb+OAL1RDHMOQHyrV7mLCgLLkvOA9Cbcez6UQ==
+float-tooltip@^1.7:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/float-tooltip/-/float-tooltip-1.7.3.tgz#d2c4fea84bc8d4b20ee97891486de2032eea08b4"
+  integrity sha512-k7/1nX3J5POXBF+xXt1M33BpBpZgJn+GkFu+u89NuULOZmBCbWywNvS1EmdmADooAMz1MoONMiKvlGZ1kfTrqA==
   dependencies:
     d3-selection "2 - 3"
     kapsule "^1.16"
