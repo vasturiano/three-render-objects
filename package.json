@@ -1,6 +1,6 @@
 {
   "name": "three-render-objects",
-  "version": "1.36.0",
+  "version": "1.36.1",
   "description": "Easy way to render ThreeJS objects with built-in interaction defaults",
   "license": "MIT",
   "type": "module",
