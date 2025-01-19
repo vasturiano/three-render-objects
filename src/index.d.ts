@@ -68,6 +68,8 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
   hoverFilter(filterFn: (obj: Object3D) => boolean): ChainableInstance;
   lineHoverPrecision(): number;
   lineHoverPrecision(precision: number): ChainableInstance;
+  pointsHoverPrecision(): number;
+  pointsHoverPrecision(precision: number): ChainableInstance;
   tooltipContent(): Obj3DAccessor<string | HTMLElement | ReactHTMLElement<HTMLElement> | boolean>;
   tooltipContent(contentAccessor: Obj3DAccessor<string | HTMLElement | ReactHTMLElement<HTMLElement> | boolean>): ChainableInstance;
   enablePointerInteraction(): boolean;

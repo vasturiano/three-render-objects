@@ -84,6 +84,7 @@ export default Kapsule({
       triggerUpdate: false
     },
     lineHoverPrecision: { default: 1, triggerUpdate: false },
+    pointsHoverPrecision: { default: 1, triggerUpdate: false },
     hoverOrderComparator: { default: () => -1, triggerUpdate: false }, // keep existing order by default
     hoverFilter: { default: () => true, triggerUpdate: false }, // exclude objects from interaction
     tooltipContent: { triggerUpdate: false },
@@ -270,6 +271,7 @@ export default Kapsule({
 
       const raycaster = new three.Raycaster();
       raycaster.params.Line.threshold = state.lineHoverPrecision; // set linePrecision
+      raycaster.params.Points.threshold = state.pointsHoverPrecision; // set pointsPrecision
       raycaster.setFromCamera(relCoords, state.camera);
       return raycaster.intersectObjects(state.objects, true);
     },
