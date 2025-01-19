@@ -116,11 +116,11 @@ export default Kapsule({
             const topIntersect = intersects.length ? intersects[0] : null;
 
             topObject = topIntersect ? topIntersect.object : null;
-            state.intersectionPoint = topIntersect ? topIntersect.point : null;
+            state.intersection = topIntersect || null;
           }
 
           if (topObject !== state.hoverObj) {
-            state.onHover(topObject, state.hoverObj);
+            state.onHover(topObject, state.hoverObj, state.intersection);
             state.tooltip.content(topObject ? accessorFn(state.tooltipContent)(topObject) || null : null);
             state.hoverObj = topObject;
           }
@@ -357,11 +357,11 @@ export default Kapsule({
 
       requestAnimationFrame(() => { // trigger click events asynchronously, to allow hoverObj to be set (on frame)
         if (ev.button === 0) { // left-click
-          state.onClick(state.hoverObj || null, ev, state.intersectionPoint) // trigger background clicks with null
+          state.onClick(state.hoverObj || null, ev, state.intersection) // trigger background clicks with null
         }
 
         if (ev.button === 2 && state.onRightClick) { // right-click
-          state.onRightClick(state.hoverObj || null, ev, state.intersectionPoint)
+          state.onRightClick(state.hoverObj || null, ev, state.intersection)
         }
       });
     }, { passive: true, capture: true }); // use capture phase to prevent propagation blocking from controls (specifically for fly)

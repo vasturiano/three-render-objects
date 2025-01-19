@@ -59,9 +59,9 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
   controls(): ThreeTrackballControls | ThreeOrbitControls | ThreeFlyControls;
 
   // Interaction
-  onClick(callback: (obj: object | null, event: MouseEvent, intersectionPoint: { x: number, y: number, z: number }) => void): ChainableInstance;
-  onRightClick(callback: (obj: object | null, event: MouseEvent, intersectionPoint: { x: number, y: number, z: number }) => void): ChainableInstance;
-  onHover(callback: (obj: object | null, previousObj: object | null) => void): ChainableInstance;
+  onClick(callback: (obj: object | null, event: MouseEvent, intersection: Intersection) => void): ChainableInstance;
+  onRightClick(callback: (obj: object | null, event: MouseEvent, intersection: Intersection) => void): ChainableInstance;
+  onHover(callback: (obj: object | null, previousObj: object | null, intersection: Intersection | null) => void): ChainableInstance;
   hoverOrderComparator(): Obj3DCompFn;
   hoverOrderComparator(compFn: Obj3DCompFn): ChainableInstance;
   hoverFilter(): (obj: Object3D) => boolean;
