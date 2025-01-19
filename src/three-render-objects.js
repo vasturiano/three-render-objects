@@ -121,7 +121,7 @@ export default Kapsule({
 
           if (topObject !== state.hoverObj) {
             state.onHover(topObject, state.hoverObj, state.intersection);
-            state.tooltip.content(topObject ? accessorFn(state.tooltipContent)(topObject) || null : null);
+            state.tooltip.content(topObject ? accessorFn(state.tooltipContent)(topObject, state.intersection) || null : null);
             state.hoverObj = topObject;
           }
         }
