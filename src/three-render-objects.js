@@ -110,12 +110,11 @@ export default Kapsule({
           // Update tooltip and trigger onHover events
           let topObject = null;
           if (state.hoverDuringDrag || !state.isPointerDragging) {
-            const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y)
-              .filter(d => state.hoverFilter(d.object));
+            const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y);
 
             state.hoverOrderComparator && intersects.sort((a, b) => state.hoverOrderComparator(a.object, b.object));
 
-            const topIntersect = intersects.length ? intersects[0] : null;
+            const topIntersect = intersects.find(d => state.hoverFilter(d.object)) || null;
 
             topObject = topIntersect ? topIntersect.object : null;
             state.intersection = topIntersect || null;
