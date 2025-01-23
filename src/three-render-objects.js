@@ -85,7 +85,7 @@ export default Kapsule({
     },
     lineHoverPrecision: { default: 1, triggerUpdate: false },
     pointsHoverPrecision: { default: 1, triggerUpdate: false },
-    hoverOrderComparator: { default: () => -1, triggerUpdate: false }, // keep existing order by default
+    hoverOrderComparator: { triggerUpdate: false }, // keep existing order by default
     hoverFilter: { default: () => true, triggerUpdate: false }, // exclude objects from interaction
     tooltipContent: { triggerUpdate: false },
     hoverDuringDrag: { default: false, triggerUpdate: false },
@@ -111,8 +111,9 @@ export default Kapsule({
           let topObject = null;
           if (state.hoverDuringDrag || !state.isPointerDragging) {
             const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y)
-              .filter(d => state.hoverFilter(d.object))
-              .sort((a, b) => state.hoverOrderComparator(a.object, b.object));
+              .filter(d => state.hoverFilter(d.object));
+
+            state.hoverOrderComparator && intersects.sort((a, b) => state.hoverOrderComparator(a.object, b.object));
 
             const topIntersect = intersects.length ? intersects[0] : null;
 
