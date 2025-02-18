@@ -56,6 +56,7 @@ new ThreeRenderObjects(<domElement>, { configOptions })
 | --- | --- | :--: |
 | <b>width</b>([<i>px</i>]) | Getter/setter for the canvas width. | *&lt;window width&gt;* |
 | <b>height</b>([<i>px</i>]) | Getter/setter for the canvas height. | *&lt;window height&gt;* |
+| <b>viewOffset</b>([<i>[number, number]</i>]) | Getter/setter for the canvas center offset (`x`, `y`). | `[0, 0]` |
 | <b>skyRadius</b>([<i>number</i>]) | Radius of the sphere that bounds the scene, in GL units. | 50000 |
 | <b>backgroundColor</b>([<i>str</i>]) | Getter/setter for the canvas background color. | `#000011` |
 | <b>backgroundImageUrl</b>([<i>url</i>]) | Getter/setter for the URL of the image to be used as scene background. If no image is provided, the background color is shown instead. | `null` |

@@ -67,6 +67,7 @@ export default Kapsule({
   props: {
     width: { default: window.innerWidth, onChange(width, state, prevWidth) { isNaN(width) && (state.width = prevWidth) } },
     height: { default: window.innerHeight, onChange(height, state, prevHeight) { isNaN(height) && (state.height = prevHeight) } },
+    viewOffset: { default: [0, 0] },
     backgroundColor: { default: '#000011' },
     backgroundImageUrl: {},
     onBackgroundImageLoaded: {},
@@ -439,12 +440,27 @@ export default Kapsule({
   update(state, changedProps) {
     // resize canvas
     if (state.width && state.height && (changedProps.hasOwnProperty('width') || changedProps.hasOwnProperty('height'))) {
-      state.container.style.width = `${state.width}px`;
-      state.container.style.height = `${state.height}px`;
+      const w = state.width;
+      const h = state.height;
+      state.container.style.width = `${w}px`;
+      state.container.style.height = `${h}px`;
       [state.renderer, state.postProcessingComposer, ...state.extraRenderers]
-        .forEach(r => r.setSize(state.width, state.height));
-      state.camera.aspect = state.width/state.height;
+        .forEach(r => r.setSize(w, h));
+      state.camera.aspect = w/h;
+
+      const o = state.viewOffset.slice(0, 2);
+      o.some(n => n) && state.camera.setViewOffset(w, h, ...o, w, h);
+
       state.camera.updateProjectionMatrix();
+    }
+
+    if (changedProps.hasOwnProperty('viewOffset')) {
+      const w = state.width;
+      const h = state.height;
+      const o = state.viewOffset.slice(0, 2);
+      o.some(n => n)
+        ? state.camera.setViewOffset(w, h, ...o, w, h)
+        : state.camera.clearViewOffset()
     }
 
     if (changedProps.hasOwnProperty('skyRadius') && state.skyRadius) {

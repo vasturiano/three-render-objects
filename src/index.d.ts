@@ -36,6 +36,8 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
   width(width: number): ChainableInstance;
   height(): number;
   height(height: number): ChainableInstance;
+  viewOffset(): [number, number];
+  viewOffset(offset: [number, number]): ChainableInstance;
   skyRadius(): number;
   skyRadius(glUnits: number): ChainableInstance;
   backgroundColor(): string;
