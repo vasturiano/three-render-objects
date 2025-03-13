@@ -47,7 +47,7 @@ const three = window.THREE
   Clock
 };
 
-import { WebGPURenderer } from "three/webgpu";
+import { WebGPURenderer } from 'three/build/three.webgpu.js';
 
 import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
