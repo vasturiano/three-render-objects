@@ -20,7 +20,7 @@ import ThreeRenderObjects from 'three-render-objects';
 ```
 or using a *script* tag
 ```html
-<script src="//unpkg.com/three-render-objects"></script>
+<script src="//cdn.jsdelivr.net/npm/three-render-objects"></script>
 ```
 then
 ```js
