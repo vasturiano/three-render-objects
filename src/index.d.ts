@@ -68,6 +68,8 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
   hoverOrderComparator(compFn: Obj3DCompFn): ChainableInstance;
   hoverFilter(): (obj: Object3D) => boolean;
   hoverFilter(filterFn: (obj: Object3D) => boolean): ChainableInstance;
+  hoverDebounceMs(): number;
+  hoverDebounceMs(ms: number): ChainableInstance;
   lineHoverPrecision(): number;
   lineHoverPrecision(precision: number): ChainableInstance;
   pointsHoverPrecision(): number;

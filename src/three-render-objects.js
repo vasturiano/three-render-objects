@@ -93,7 +93,8 @@ export default Kapsule({
     clickAfterDrag: { default: false, triggerUpdate: false },
     onHover: { default: () => {}, triggerUpdate: false },
     onClick: { default: () => {}, triggerUpdate: false },
-    onRightClick: { triggerUpdate: false }
+    onRightClick: { triggerUpdate: false },
+    hoverDebounceMs: { default: 200, triggerUpdate: false } // New prop for hover debounce timeout
   },
 
   methods: {
@@ -107,32 +108,34 @@ export default Kapsule({
 
         state.extraRenderers.forEach(r => r.render(state.scene, state.camera));
 
-        if (state.enablePointerInteraction) {
-          // Update tooltip and trigger onHover events
-          let topObject = null;
-          if (state.hoverDuringDrag || !state.isPointerDragging) {
-            const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y);
-
-            state.hoverOrderComparator && intersects.sort((a, b) => state.hoverOrderComparator(a.object, b.object));
-
-            const topIntersect = intersects.find(d => state.hoverFilter(d.object)) || null;
-
-            topObject = topIntersect ? topIntersect.object : null;
-            state.intersection = topIntersect || null;
-          }
-
-          if (topObject !== state.hoverObj) {
-            state.onHover(topObject, state.hoverObj, state.intersection);
-            state.tooltip.content(topObject ? accessorFn(state.tooltipContent)(topObject, state.intersection) || null : null);
-            state.hoverObj = topObject;
-          }
-        }
-
         state.tweenGroup.update(); // update camera animation tweens
       }
 
       return this;
     },
+    
+    // Method for checking hover objects
+    checkHoverObjects: function(state) {
+      // Update tooltip and trigger onHover events
+      let topObject = null;
+      if (state.hoverDuringDrag || !state.isPointerDragging) {
+        const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y);
+
+        state.hoverOrderComparator && intersects.sort((a, b) => state.hoverOrderComparator(a.object, b.object));
+
+        const topIntersect = intersects.find(d => state.hoverFilter(d.object)) || null;
+
+        topObject = topIntersect ? topIntersect.object : null;
+        state.intersection = topIntersect || null;
+      }
+
+      if (topObject !== state.hoverObj) {
+        state.onHover(topObject, state.hoverObj, state.intersection);
+        state.tooltip.content(topObject ? accessorFn(state.tooltipContent)(topObject, state.intersection) || null : null);
+        state.hoverObj = topObject;
+      }
+    },
+    
     getPointerPos: function(state) {
       const { x, y } = state.pointerPos;
       return { x, y };
@@ -288,7 +291,8 @@ export default Kapsule({
     scene: new three.Scene(),
     camera: new three.PerspectiveCamera(),
     clock: new three.Clock(),
-    tweenGroup: new TweenGroup()
+    tweenGroup: new TweenGroup(),
+    hoverCheckTimeout: null
   }),
 
   init(domNode, state, {
@@ -319,6 +323,22 @@ export default Kapsule({
     // Setup tooltip
     state.tooltip = new Tooltip(state.container);
 
+    // Create debounce function for hover checking
+    const self = this;
+    const scheduleHoverCheck = () => {
+      // Clear existing timeout
+      if (state.hoverCheckTimeout) {
+        clearTimeout(state.hoverCheckTimeout);
+      }
+      
+      // Set new timeout that will execute the hover check
+      state.hoverCheckTimeout = setTimeout(() => {
+        if (state.enablePointerInteraction) {
+          self.checkHoverObjects(state);
+        }
+      }, state.hoverDebounceMs);
+    };
+
     // Capture pointer coords on move or touchstart
     state.pointerPos = new three.Vector2();
     state.pointerPos.x = -2; // Initialize off canvas
@@ -339,6 +359,9 @@ export default Kapsule({
           const offset = getOffset(state.container);
           state.pointerPos.x = ev.pageX - offset.left;
           state.pointerPos.y = ev.pageY - offset.top;
+          
+          // Schedule hover check with debounce
+          scheduleHoverCheck();
         }
 
         function getOffset(el) {
