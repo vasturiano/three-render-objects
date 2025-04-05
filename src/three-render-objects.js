@@ -84,6 +84,7 @@ export default Kapsule({
       },
       triggerUpdate: false
     },
+    pointerRaycasterThrottleMs: { default: 50, triggerUpdate: false },
     lineHoverPrecision: { default: 1, triggerUpdate: false },
     pointsHoverPrecision: { default: 1, triggerUpdate: false },
     hoverOrderComparator: { triggerUpdate: false }, // keep existing order by default
@@ -107,7 +108,9 @@ export default Kapsule({
 
         state.extraRenderers.forEach(r => r.render(state.scene, state.camera));
 
-        if (state.enablePointerInteraction) {
+        const now = +new Date();
+        if (state.enablePointerInteraction && (now - state.lastRaycasterCheck) >= state.pointerRaycasterThrottleMs) {
+          state.lastRaycasterCheck = now;
           // Update tooltip and trigger onHover events
           let topObject = null;
           if (state.hoverDuringDrag || !state.isPointerDragging) {
@@ -288,7 +291,8 @@ export default Kapsule({
     scene: new three.Scene(),
     camera: new three.PerspectiveCamera(),
     clock: new three.Clock(),
-    tweenGroup: new TweenGroup()
+    tweenGroup: new TweenGroup(),
+    lastRaycasterCheck: 0
   }),
 
   init(domNode, state, {

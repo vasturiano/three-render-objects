@@ -74,6 +74,8 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
   pointsHoverPrecision(precision: number): ChainableInstance;
   tooltipContent(): Obj3DAccessor<string | HTMLElement | ReactHTMLElement<HTMLElement> | boolean>;
   tooltipContent(contentAccessor: Obj3DAccessor<string | HTMLElement | ReactHTMLElement<HTMLElement> | boolean>): ChainableInstance;
+  pointerRaycasterThrottleMs(): number;
+  pointerRaycasterThrottleMs(ms: number): ChainableInstance;
   enablePointerInteraction(): boolean;
   enablePointerInteraction(enable: boolean): ChainableInstance;
   hoverDuringDrag(): boolean;
