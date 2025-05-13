@@ -356,6 +356,8 @@ export default Kapsule({
 
     // Handle click events on objs
     state.container.addEventListener('pointerup', ev => {
+      if (!state.isPointerPressed) return; // don't trigger click events if pointer is not pressed on the canvas
+
       state.isPointerPressed = false;
       if (state.isPointerDragging) {
         state.isPointerDragging = false;
