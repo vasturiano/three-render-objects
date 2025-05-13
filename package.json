@@ -56,19 +56,19 @@
     "three": ">=0.168"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.10",
-    "@babel/preset-env": "^7.26.9",
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
-    "@types/react": "^19.1.0",
+    "@types/react": "^19.1.4",
     "postcss": "^8.5.3",
     "rimraf": "^6.0.1",
-    "rollup": "^4.39.0",
+    "rollup": "^4.40.2",
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-postcss": "^4.0.2",
-    "three": "^0.175.0",
+    "three": "^0.176.0",
     "typescript": "^5.8.3"
   },
   "engines": {
