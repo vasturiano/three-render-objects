@@ -100,7 +100,7 @@ export default Kapsule({
   methods: {
     tick: function(state) {
       if (state.initialised) {
-        state.controls.update && state.controls.update(Math.min(1, state.clock.getDelta())); // timedelta is required for fly controls
+        state.controls.enabled && state.controls.update && state.controls.update(Math.min(1, state.clock.getDelta())); // timedelta is required for fly controls
 
         state.postProcessingComposer
           ? state.postProcessingComposer.render() // if using postprocessing, switch the output to it
