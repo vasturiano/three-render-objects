@@ -160,6 +160,7 @@ export default Kapsule({
               .to(finalPos, transitionDuration)
               .easing(Easing.Quadratic.Out)
               .onUpdate(setCameraPos)
+              .onComplete(function() { state.tweenGroup.remove(this) })
               .start()
           );
 
@@ -169,6 +170,7 @@ export default Kapsule({
               .to(finalLookAt, transitionDuration / 3)
               .easing(Easing.Quadratic.Out)
               .onUpdate(setLookAt)
+              .onComplete(function() { state.tweenGroup.remove(this) })
               .start()
           );
         }
