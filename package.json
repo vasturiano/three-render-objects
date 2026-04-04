@@ -53,7 +53,7 @@
     "polished": "4"
   },
   "peerDependencies": {
-    "three": ">=0.168"
+    "three": ">=0.179"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",

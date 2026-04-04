@@ -19,7 +19,7 @@ import {
   MOUSE,
   Quaternion,
   Spherical,
-  Clock
+  Timer
 } from 'three';
 
 const three = window.THREE
@@ -44,7 +44,7 @@ const three = window.THREE
   MOUSE,
   Quaternion,
   Spherical,
-  Clock
+  Timer
 };
 
 import { WebGPURenderer } from 'three/webgpu';
@@ -102,7 +102,7 @@ export default Kapsule({
   methods: {
     tick: function(state) {
       if (state.initialised) {
-        state.controls.enabled && state.controls.update && state.controls.update(Math.min(1, state.clock.getDelta())); // timedelta is required for fly controls
+        state.controls.enabled && state.controls.update && state.controls.update(Math.min(1, state.timer.update().getDelta())); // timedelta is required for fly controls
 
         state.postProcessingComposer
           ? state.postProcessingComposer.render() // if using postprocessing, switch the output to it
@@ -300,7 +300,7 @@ export default Kapsule({
   stateInit: () => ({
     scene: new three.Scene(),
     camera: new three.PerspectiveCamera(),
-    clock: new three.Clock(),
+    timer: new three.Timer(),
     tweenGroup: new TweenGroup(),
     lastRaycasterCheck: 0
   }),
