@@ -24,6 +24,7 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
   constructor(element: HTMLElement, configOptions?: ConfigOptions);
 
   resetProps(): ChainableInstance;
+  _destructor(): void;
 
   // Data input
   objects(): Object3D[];
