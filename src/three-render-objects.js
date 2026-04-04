@@ -63,6 +63,8 @@ import accessorFn from 'accessor-fn';
 import Kapsule from 'kapsule';
 import Tooltip from 'float-tooltip';
 
+import { emptyObject } from './three-gc.js';
+
 export default Kapsule({
   props: {
     width: { default: window.innerWidth, onChange(width, state, prevWidth) { isNaN(width) && (state.width = prevWidth) } },
@@ -286,7 +288,13 @@ export default Kapsule({
     camera: state => state.camera,
     postProcessingComposer: state => state.postProcessingComposer,
     controls: state => state.controls,
-    tbControls: state => state.controls // to be deprecated
+    tbControls: state => state.controls, // to be deprecated
+    _destructor: function(state) {
+      emptyObject(state.scene);
+      state.controls?.dispose();
+      state.renderer?.dispose();
+      state.postProcessingComposer?.dispose();
+    }
   },
 
   stateInit: () => ({
