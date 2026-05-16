@@ -150,6 +150,10 @@ export default Kapsule({
         const finalPos = position;
         const finalLookAt = lookAt || {x: 0, y: 0, z: 0};
 
+        // cancel any ongoing pov animation
+        state.povPosTween?.end();
+        state.povTgtTween?.end();
+
         if (!transitionDuration) { // no animation
           setCameraPos(finalPos);
           setLookAt(finalLookAt);
@@ -158,21 +162,27 @@ export default Kapsule({
           const camLookAt = getLookAt();
 
           state.tweenGroup.add(
-            new Tween(camPos)
+            state.povPosTween = new Tween(camPos)
               .to(finalPos, transitionDuration)
               .easing(Easing.Quadratic.Out)
               .onUpdate(setCameraPos)
-              .onComplete(function() { state.tweenGroup.remove(this) })
+              .onComplete(function() {
+                state.povPosTween = undefined;
+                state.tweenGroup.remove(this);
+              })
               .start()
           );
 
           // Face direction in 1/3rd of time
           state.tweenGroup.add(
-            new Tween(camLookAt)
+            state.povTgtTween = new Tween(camLookAt)
               .to(finalLookAt, transitionDuration / 3)
               .easing(Easing.Quadratic.Out)
               .onUpdate(setLookAt)
-              .onComplete(function() { state.tweenGroup.remove(this) })
+              .onComplete(function() {
+                state.povTgtTween = undefined;
+                state.tweenGroup.remove(this);
+              })
               .start()
           );
         }
