@@ -223,35 +223,69 @@ export default Kapsule({
       return this.fitToBbox(this.getBbox(...bboxArgs), transitionDuration, padding);
     },
     fitToBbox: function (state, bbox, transitionDuration = 0, padding = 10) {
-      // based on https://discourse.threejs.org/t/camera-zoom-to-fit-object/936/24
       const camera = state.camera;
-
       if (bbox) {
-        const center = new three.Vector3(0, 0, 0); // reset camera aim to center
-        const maxBoxSide = Math.max(...Object.entries(bbox)
-          .map(([coordType, coords]) => Math.max(...coords.map(c => Math.abs(center[coordType] - c))))
-        ) * 2;
+       const center = new three.Vector3(
+          (bbox.x[0] + bbox.x[1]) / 2,
+          (bbox.y[0] + bbox.y[1]) / 2,
+          (bbox.z[0] + bbox.z[1]) / 2
+        );
 
-        // find distance that fits whole bbox within padded fov
+        camera.updateMatrixWorld();
+        const camRight = new three.Vector3();
+        const camUp = new three.Vector3();
+        const camForward = new three.Vector3();
+        camera.getWorldDirection(camForward);
+        camRight.crossVectors(camForward, camera.up).normalize();
+        camUp.crossVectors(camRight, camForward).normalize();
+
         const paddedFov = (1 - (padding * 2 / state.height)) * camera.fov;
-        const fitHeightDistance = maxBoxSide / Math.atan(paddedFov * Math.PI / 180);
-        const fitWidthDistance = fitHeightDistance / camera.aspect;
-        const distance = Math.max(fitHeightDistance, fitWidthDistance);
+        const vFovHalf = (paddedFov / 2) * (Math.PI / 180);
+        const hFovHalf = Math.atan(Math.tan(vFovHalf) * camera.aspect);
 
-        if (distance > 0) {
-          const newCameraPosition = center.clone()
-            .sub(camera.position)
-            .normalize()
-            .multiplyScalar(-distance);
+        let maxDistance = 0;
+        const corners = [
+          new three.Vector3(bbox.x[0], bbox.y[0], bbox.z[0]),
+          new three.Vector3(bbox.x[0], bbox.y[0], bbox.z[1]),
+          new three.Vector3(bbox.x[0], bbox.y[1], bbox.z[0]),
+          new three.Vector3(bbox.x[0], bbox.y[1], bbox.z[1]),
+          new three.Vector3(bbox.x[1], bbox.y[0], bbox.z[0]),
+          new three.Vector3(bbox.x[1], bbox.y[0], bbox.z[1]),
+          new three.Vector3(bbox.x[1], bbox.y[1], bbox.z[0]),
+          new three.Vector3(bbox.x[1], bbox.y[1], bbox.z[1])
+        ];
 
-          this.cameraPosition(newCameraPosition, center, transitionDuration);
+        for (const corner of corners) {
+          const localPos = corner.clone().sub(center);
+          const h = Math.abs(localPos.dot(camUp)); 
+          const w = Math.abs(localPos.dot(camRight)); 
+          const depthOffset = localPos.dot(camForward);
+          
+          const distH = h / Math.tan(vFovHalf) - depthOffset;
+          const distW = w / Math.tan(hFovHalf) - depthOffset;
+          maxDistance = Math.max(maxDistance, distH, distW);
         }
+
+        const distance = maxDistance;
+          const dir = camForward.clone().negate();
+            const newPos = {
+                x: center.x + dir.x * distance,
+                y: center.y + dir.y * distance,
+                z: center.z + dir.z * distance,
+            };
+
+            this.cameraPosition(
+                newPos,
+                { x: center.x, y: center.y, z: center.z },
+                transitionDuration
+            );
+
       }
 
       return this;
     },
     getBbox: function (state, objFilter = () => true) {
-      const box = new three.Box3(new three.Vector3(0, 0, 0), new three.Vector3(0, 0, 0));
+      const box = new three.Box3();
       const objs = state.objects.filter(objFilter);
 
       if (!objs.length) return null;
