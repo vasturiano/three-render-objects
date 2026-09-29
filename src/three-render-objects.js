@@ -219,22 +219,19 @@ export default Kapsule({
         );
       }
     },
-    zoomToFit: function (state, transitionDuration = 0, padding = 10, ...bboxArgs) {
-      return this.fitToBbox(this.getBbox(...bboxArgs), transitionDuration, padding);
+    zoomToFit: function (state, transitionDuration = 0, padding = 10, bboxArg, preserveLookDirection) {
+      return this.fitToBbox(this.getBbox(bboxArg), transitionDuration, padding, preserveLookDirection);
     },
-    fitToBbox: function (state, bbox, transitionDuration = 0, padding = 10) {
+    fitToBbox: function (state, bbox, transitionDuration = 0, padding = 10, preserveLookDirection = false) {
       const camera = state.camera;
-      if (bbox) {
-       const center = new three.Vector3(
-          (bbox.x[0] + bbox.x[1]) / 2,
-          (bbox.y[0] + bbox.y[1]) / 2,
-          (bbox.z[0] + bbox.z[1]) / 2
-        );
 
+      if (bbox) {
         camera.updateMatrixWorld();
         const camRight = new three.Vector3();
         const camUp = new three.Vector3();
         const camForward = new three.Vector3();
+        const camPos = new three.Vector3();
+        camera.getWorldPosition(camPos);
         camera.getWorldDirection(camForward);
         camRight.crossVectors(camForward, camera.up).normalize();
         camUp.crossVectors(camRight, camForward).normalize();
@@ -243,8 +240,16 @@ export default Kapsule({
         const vFovHalf = (paddedFov / 2) * (Math.PI / 180);
         const hFovHalf = Math.atan(Math.tan(vFovHalf) * camera.aspect);
 
-        let maxDistance = 0;
-        const corners = [
+        const bboxCenter = new three.Vector3(
+          (bbox.x[0] + bbox.x[1]) / 2,
+          (bbox.y[0] + bbox.y[1]) / 2,
+          (bbox.z[0] + bbox.z[1]) / 2
+        );
+        const center = preserveLookDirection
+          ? camForward.clone().multiplyScalar(camPos.distanceTo(bboxCenter)).add(camPos)
+          : bboxCenter;
+
+        const distance = Math.max(0, ...[
           new three.Vector3(bbox.x[0], bbox.y[0], bbox.z[0]),
           new three.Vector3(bbox.x[0], bbox.y[0], bbox.z[1]),
           new three.Vector3(bbox.x[0], bbox.y[1], bbox.z[0]),
@@ -253,33 +258,22 @@ export default Kapsule({
           new three.Vector3(bbox.x[1], bbox.y[0], bbox.z[1]),
           new three.Vector3(bbox.x[1], bbox.y[1], bbox.z[0]),
           new three.Vector3(bbox.x[1], bbox.y[1], bbox.z[1])
-        ];
-
-        for (const corner of corners) {
+        ].map(corner => {
           const localPos = corner.clone().sub(center);
-          const h = Math.abs(localPos.dot(camUp)); 
-          const w = Math.abs(localPos.dot(camRight)); 
-          const depthOffset = localPos.dot(camForward);
-          
-          const distH = h / Math.tan(vFovHalf) - depthOffset;
-          const distW = w / Math.tan(hFovHalf) - depthOffset;
-          maxDistance = Math.max(maxDistance, distH, distW);
-        }
+          return Math.max(
+            Math.abs(localPos.dot(camUp)) / Math.tan(vFovHalf),
+            Math.abs(localPos.dot(camRight)) / Math.tan(hFovHalf)
+          ) - localPos.dot(camForward);
+        }));
 
-        const distance = maxDistance;
-          const dir = camForward.clone().negate();
-            const newPos = {
-                x: center.x + dir.x * distance,
-                y: center.y + dir.y * distance,
-                z: center.z + dir.z * distance,
-            };
+        const dir = camForward.clone().negate();
+        const newCameraPos = {
+          x: center.x + dir.x * distance,
+          y: center.y + dir.y * distance,
+          z: center.z + dir.z * distance
+        };
 
-            this.cameraPosition(
-                newPos,
-                { x: center.x, y: center.y, z: center.z },
-                transitionDuration
-            );
-
+        this.cameraPosition(newCameraPos, center, transitionDuration);
       }
 
       return this;
