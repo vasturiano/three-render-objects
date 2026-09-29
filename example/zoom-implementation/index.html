@@ -1,0 +1,121 @@
+<head>
+  <style> 
+    body { margin: 0; font-family: sans-serif; }
+    #controls {
+      position: absolute; 
+      top: 15px; 
+      left: 15px; 
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    button {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px 16px; 
+      font-size: 14px; 
+      cursor: pointer; 
+      border-radius: 4px; 
+      border: 1px solid #ccc; 
+      background: white; 
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #f0f0f0;
+    }
+    p { margin: 0 0 10px 0; max-width: 300px; font-size: 13px; color: #333; line-height: 1.4; }
+    canvas{
+      border: #ccc 1px solid;
+    }
+  </style>
+
+  <script type="importmap">{ "imports": {
+    "three": "https://esm.sh/three"
+  }}</script>
+  <script type="module">
+    import * as THREE from 'three';
+    window.THREE = THREE;
+  </script>
+
+ <script src="../../dist/three-render-objects.js" defer></script>
+</head>
+
+<body>
+  <div id="myscene"></div>
+  <div id="controls">
+    <button id="zoom-normal-btn">Zoom to Fit (New Implementation)</button>
+   
+    <button id="zoom-old-btn">Zoom to Fit (Old Implementation)</button>
+    </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+
+    const N = 200;
+    const X_RANGE = 250; 
+    const Y_RANGE = 250; 
+    const Z_RANGE = 50;
+
+    const objs = [...Array(N)].map(() => new THREE.Mesh(
+      new THREE.SphereGeometry(15, 16, 16),
+      new THREE.MeshNormalMaterial({ wireframe: true })
+    ));
+
+    objs.forEach(obj => {
+      // Offset by 600 on the X axis so it is NOT centered at 0,0,0
+      obj.position.x = 600 + Math.random() * X_RANGE * 2 - X_RANGE;
+      obj.position.y = Math.random() * Y_RANGE * 2 - Y_RANGE;
+      obj.position.z = Math.random() * Z_RANGE * 2 - Z_RANGE;
+    });
+
+    // Simple axis helper though this will affect the bounding box
+    // objs.push(new THREE.AxesHelper(100));
+
+    const ObjRender = new ThreeRenderObjects(
+      document.getElementById('myscene'),
+      { controlType: 'trackball' }
+    )
+      .objects(objs);
+
+    document.getElementById('zoom-normal-btn').addEventListener('click', () => {
+      ObjRender.zoomToFit(800, 20);
+    });
+
+    document.getElementById('zoom-old-btn').addEventListener('click', () => {
+      // Replicate the old fitToBbox logic from old-three-render-objects.js
+      const camera = ObjRender.camera();
+      const bbox = ObjRender.getBbox();
+      const transitionDuration = 800;
+      const padding = 20;
+
+      if (bbox) {
+        const center = new THREE.Vector3(0, 0, 0); // old logic always reset to 0,0,0
+        const maxBoxSide = Math.max(...Object.entries(bbox)
+          .map(([coordType, coords]) => Math.max(...coords.map(c => Math.abs(center[coordType] - c))))
+        ) * 2;
+
+        const paddedFov = (1 - (padding * 2 / ObjRender.height())) * camera.fov;
+        const fitHeightDistance = maxBoxSide / Math.atan(paddedFov * Math.PI / 180);
+        const fitWidthDistance = fitHeightDistance / camera.aspect;
+        const distance = Math.max(fitHeightDistance, fitWidthDistance);
+
+        if (distance > 0) {
+          const newCameraPosition = center.clone()
+            .sub(camera.position)
+            .normalize()
+            .multiplyScalar(-distance);
+
+          ObjRender.cameraPosition(newCameraPosition, center, transitionDuration);
+        }
+      }
+    });
+
+
+    (function animate() {
+      ObjRender.tick();
+      requestAnimationFrame(animate);
+    })();
+  </script>
+</body>
