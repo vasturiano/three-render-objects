@@ -474,6 +474,8 @@ export default Kapsule({
         state.controlsEngaged = false;
         state.controlsDragging = false;
       });
+
+      state.renderer.domElement.style.cursor = null; // remove cursor: auto property on canvas
     }
 
     [state.renderer, state.postProcessingComposer, ...state.extraRenderers]
