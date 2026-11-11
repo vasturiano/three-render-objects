@@ -102,7 +102,7 @@ export default Kapsule({
   methods: {
     tick: function(state) {
       if (state.initialised) {
-        state.controls.enabled && state.controls.update && state.controls.update(Math.min(1, state.timer.update().getDelta())); // timedelta is required for fly controls
+        state.controls.enabled && state.controls.update?.(Math.min(1, state.timer.update().getDelta())); // timedelta is required for fly controls
 
         state.postProcessingComposer
           ? state.postProcessingComposer.render() // if using postprocessing, switch the output to it
@@ -326,7 +326,6 @@ export default Kapsule({
     camera: state => state.camera,
     postProcessingComposer: state => state.postProcessingComposer,
     controls: state => state.controls,
-    tbControls: state => state.controls, // to be deprecated
     _destructor: function(state) {
       emptyObject(state.scene);
       state.controls?.dispose();
@@ -447,7 +446,7 @@ export default Kapsule({
     state.postProcessingComposer.addPass(new ThreeRenderPass(state.scene, state.camera)); // render scene as first pass
 
     // configure controls
-    state.controls = new ({
+    state.controls = new (isClass(controlType) ? controlType : {
       trackball: ThreeTrackballControls,
       orbit: ThreeOrbitControls,
       fly: ThreeFlyControls
@@ -572,3 +571,9 @@ export default Kapsule({
     }
   }
 });
+
+
+function isClass(value) {
+  return typeof value === 'function' &&
+    Function.prototype.toString.call(value).startsWith('class');
+}

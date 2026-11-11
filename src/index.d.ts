@@ -1,4 +1,4 @@
-import { Object3D, Light, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Renderer, Intersection } from 'three';
+import { Object3D, Light, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Renderer, Intersection, Controls } from 'three';
 import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
@@ -6,7 +6,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { ReactHTMLElement } from 'react';
 
 export interface ConfigOptions {
-  controlType?: 'trackball' | 'orbit' | 'fly';
+  controlType?: 'trackball' | 'orbit' | 'fly' | Controls;
   useWebGPU?: boolean;
   rendererConfig?: WebGLRendererParameters;
   extraRenderers?: Renderer[];
@@ -17,6 +17,7 @@ type Accessor<In, Out> = Out | string | ((obj: In) => Out);
 type Obj3DAccessor<T> = Accessor<Object3D, T>;
 
 type Coords = { x: number; y: number; z: number; };
+type CameraCoords = Coords & { lookAt: Coords };
 
 type Obj3DCompFn = (a: Object3D, b: Object3D) => number;
 
@@ -51,7 +52,7 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
 
   // Render control
   tick(): ChainableInstance;
-  cameraPosition(): Coords;
+  cameraPosition(): CameraCoords;
   cameraPosition(position: Partial<Coords>, lookAt?: Coords, transitionMs?: number): ChainableInstance;
   zoomToFit(durationMs?: number, padding?: number, objFilter?: (obj: Object3D) => boolean, preserveLookDirection?: boolean): ChainableInstance;
   fitToBbox(bbox: { x: [number, number], y: [number, number], z: [number, number] }, durationMs?: number, padding?: number, preserveLookDirection?: boolean): ChainableInstance;
