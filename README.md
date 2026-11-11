@@ -9,7 +9,7 @@ This module offers a convenient way to render [ThreeJS](https://threejs.org/) ob
 * hover/click events
 * tooltips
 * camera movement with animated transitions
-* trackball, orbit or fly controls
+* trackball, arcball, orbit, fly or any custom controls
 
 All the renderer/scene/camera scaffolding is already included and any instance of [Object3D](https://threejs.org/docs/#api/core/Object3D) can be rendered with minimal setup. 
 
@@ -37,7 +37,7 @@ new ThreeRenderObjects(<domElement>, { configOptions })
 
 | Config options | Description | Default |
 | --- | --- | :--: |
-| <b>controlType</b>: <i>str</i> or <i>class</i> | Which type of control to use to control the camera. Choice between [trackball](https://threejs.org/examples/misc_controls_trackball.html), [orbit](https://threejs.org/examples/#misc_controls_orbit), [fly](https://threejs.org/examples/misc_controls_fly.html), or a custom [Three.js controls](https://threejs.org/docs/#Controls) class. | `trackball` |
+| <b>controlType</b>: <i>str</i> or <i>class</i> | Which type of control to use to control the camera. Choice between [trackball](https://threejs.org/examples/misc_controls_trackball.html), [arcball](https://threejs.org/examples/misc_controls_arcball.html), [orbit](https://threejs.org/examples/#misc_controls_orbit), [fly](https://threejs.org/examples/misc_controls_fly.html), or a custom [Three.js controls](https://threejs.org/docs/#Controls) class. | `trackball` |
 | <b>useWebGPU</b>: <i>boolean</i> | Whether to use the `WebGPURenderer` instead of the default `WebGLRenderer`. | `false` |
 | <b>rendererConfig</b>: <i>object</i> | Configuration parameters to pass to the [ThreeJS WebGLRenderer](https://threejs.org/docs/#api/en/renderers/WebGLRenderer) constructor. | `{ antialias: true, alpha: true }` |
 | <b>extraRenderers</b>: <i>array</i> | If you wish to include objects that require a dedicated renderer besides `WebGL`, such as [CSS3DRenderer](https://threejs.org/docs/#examples/en/renderers/CSS3DRenderer), include in this array those extra renderer instances. | `[]` |

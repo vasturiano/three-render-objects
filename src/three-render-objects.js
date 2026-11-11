@@ -49,9 +49,10 @@ const three = window.THREE
 
 import { WebGPURenderer } from 'three/webgpu';
 
-import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
-import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
+import { TrackballControls as ThreeTrackballControls } from 'three/addons/controls/TrackballControls.js';
+import { ArcballControls as ThreeArcballControls } from 'three/addons/controls/ArcballControls.js';
+import { OrbitControls as ThreeOrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { FlyControls as ThreeFlyControls } from 'three/addons/controls/FlyControls.js';
 
 import { EffectComposer as ThreeEffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass as ThreeRenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -363,6 +364,7 @@ export default Kapsule({
     state.navInfo.textContent = {
         orbit: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
         trackball: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
+        arcball: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan',
         fly: 'WASD: move, R|F: up | down, Q|E: roll, up|down: pitch, left|right: yaw'
       }[controlType] || '';
     state.navInfo.style.display = state.showNavInfo ? null : 'none';
@@ -448,6 +450,7 @@ export default Kapsule({
     // configure controls
     state.controls = new (isClass(controlType) ? controlType : {
       trackball: ThreeTrackballControls,
+      arcball: ThreeArcballControls,
       orbit: ThreeOrbitControls,
       fly: ThreeFlyControls
     }[controlType])(state.camera, state.renderer.domElement);
@@ -458,7 +461,7 @@ export default Kapsule({
       state.controls.dragToLook = true;
     }
 
-    if (controlType === 'trackball' || controlType === 'orbit') {
+    if (controlType === 'trackball' || controlType === 'arcball' || controlType === 'orbit') {
       state.controls.minDistance = 0.1;
       state.controls.maxDistance = state.skyRadius;
       state.controls.addEventListener('start', () => {

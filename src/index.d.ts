@@ -1,12 +1,13 @@
 import { Object3D, Light, WebGLRendererParameters, Scene, Camera, WebGLRenderer, Renderer, Intersection, Controls } from 'three';
-import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
-import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { FlyControls as ThreeFlyControls } from 'three/examples/jsm/controls/FlyControls.js';
+import { TrackballControls as ThreeTrackballControls } from 'three/addons/controls/TrackballControls.js';
+import { ArcballControls as ThreeArcballControls } from 'three/addons/controls/ArcballControls.js';
+import { OrbitControls as ThreeOrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { FlyControls as ThreeFlyControls } from 'three/addons/controls/FlyControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { ReactHTMLElement } from 'react';
 
 export interface ConfigOptions {
-  controlType?: 'trackball' | 'orbit' | 'fly' | Controls;
+  controlType?: 'trackball' | 'arcball' | 'orbit' | 'fly' | Controls;
   useWebGPU?: boolean;
   rendererConfig?: WebGLRendererParameters;
   extraRenderers?: Renderer[];
@@ -60,7 +61,7 @@ export declare class ThreeRenderObjectsGeneric<ChainableInstance> {
   renderer(): WebGLRenderer;
   scene(): Scene;
   camera(): Camera;
-  controls(): ThreeTrackballControls | ThreeOrbitControls | ThreeFlyControls;
+  controls(): ThreeTrackballControls | ThreeArcballControls | ThreeOrbitControls | ThreeFlyControls | Controls;
 
   // Interaction
   onClick(callback: (obj: object | null, event: MouseEvent, intersection: Intersection) => void): ChainableInstance;
