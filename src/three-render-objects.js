@@ -119,7 +119,7 @@ export default Kapsule({
           if (state.hoverDuringDrag || !state.isPointerDragging) {
             const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y);
 
-            state.hoverOrderComparator && intersects.sort((a, b) => state.hoverOrderComparator(a.object, b.object));
+            state.hoverOrderComparator && intersects.sort((a, b) => state.hoverOrderComparator(a.object, b.object, a, b));
 
             const topIntersect = intersects.find(d => state.hoverFilter(d.object)) || null;
 
