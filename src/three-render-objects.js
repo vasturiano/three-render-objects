@@ -116,6 +116,7 @@ export default Kapsule({
           state.lastRaycasterCheck = now;
           // Update tooltip and trigger onHover events
           let topObject = null;
+          let topInstanceId = null;
           if (state.hoverDuringDrag || !state.isPointerDragging) {
             const intersects = this.intersectingObjects(state.pointerPos.x, state.pointerPos.y);
 
@@ -125,12 +126,14 @@ export default Kapsule({
 
             topObject = topIntersect ? topIntersect.object : null;
             state.intersection = topIntersect || null;
+            topInstanceId = topObject?.isInstancedMesh ? state.intersection?.instanceId : null;
           }
 
-          if (topObject !== state.hoverObj) {
+          if (topObject !== state.hoverObj || topInstanceId !== state.hoverInstanceId) {
             state.onHover(topObject, state.hoverObj, state.intersection);
             state.tooltip.content(topObject ? accessorFn(state.tooltipContent)(topObject, state.intersection) || null : null);
             state.hoverObj = topObject;
+            state.hoverInstanceId = topInstanceId;
           }
         }
 
