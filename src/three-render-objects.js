@@ -154,9 +154,7 @@ export default Kapsule({
         const finalPos = position;
         const finalLookAt = lookAt || {x: 0, y: 0, z: 0};
 
-        // cancel any ongoing pov animation
-        state.povPosTween?.end();
-        state.povTgtTween?.end();
+        this._cancelCameraTweens(); // cancel any ongoing pov animation
 
         if (!transitionDuration) { // no animation
           setCameraPos(finalPos);
@@ -222,6 +220,15 @@ export default Kapsule({
             .add(camera.position)
         );
       }
+    },
+    _cancelCameraTweens: function (state) {
+      ['povPosTween', 'povTgtTween'].forEach(tKey => {
+        const t = state[tKey];
+        if (t) {
+          state[tKey] = undefined;
+          t.remove();
+        }
+      });
     },
     zoomToFit: function (state, transitionDuration = 0, padding = 10, bboxArg, preserveLookDirection) {
       return this.fitToBbox(this.getBbox(bboxArg), transitionDuration, padding, preserveLookDirection);
@@ -457,6 +464,9 @@ export default Kapsule({
       orbit: ThreeOrbitControls,
       fly: ThreeFlyControls
     }[controlType])(state.camera, state.renderer.domElement);
+
+    // Cancel any ongoing camera tweens on controls touch
+    state.controls.addEventListener('start', this._cancelCameraTweens);
 
     if (controlType === 'fly') {
       state.controls.movementSpeed = 300;
